@@ -16,6 +16,7 @@ import CalculatorScreen from './screens/CalculatorScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import HistoryScreen from './screens/HistoryScreen';
 
+
 export default function App() {
   const Stack = createNativeStackNavigator();
 
