@@ -43,54 +43,26 @@ const ICONS = {
 const HomeScreen = ({ route, navigation }) => {
   
   const prodDetails = {
-    // prodTitle:
-    // prod
-    lat1: '',
-    lon1: '',
-    lat2: '',
-    lon2: '',
-    distance: '',
-    bearing: '',
+    prodTitle: '',
+    prodExpirationDate: '',
+    prodDateAdded: '',
+    prodDateToBin: '', // if left empty, autoset as expirationDate?
+    prodIsExpired: false, // default to false? string or boolean?
+    prodThumbnail: '',
+    prodPrice: '',
+    prodBarcode: '',
+
+    // lat1: '',     // --> prodTitle
+    // lon1: '',     // --> prodExpirationDate
+    // lat2: '',     // --> prodDateAdded
+    // lon2: '',     // --> prodDateToBin
+    // distance: '', // --> prodIsExpired
+    // bearing: '',  // --> prodThumbnail
   }
 
 
-// to save history
+// to save history (list of all current products)
 const [historyState, setHistoryState] = useState([]);
-
-const [weatherState1, setWeatherState1] = useState({
-  weatherPoint: 'Point 1',
-  // weatherError: false,
-  weatherDesc: '',
-  temp: '',
-  icon: '',
-});
-const [weatherState2, setWeatherState2] = useState({
-  weatherPoint: 'Point 2',
-  // weatherError: false,
-  weatherDesc: '',
-  temp: '',
-  icon: '',
-});
-
-const updateWeatherState1 = (vals) => {
-  // console.log('---- In updateStateObject ', vals);
-  setWeatherState1({
-    ...weatherState1,
-    ...vals,
-  });
-};
-
-const updateWeatherState2 = (vals) => {
-  // console.log('---- In updateStateObject ', vals);
-  setWeatherState2({
-    ...weatherState2,
-    ...vals,
-  });
-};
-
-useEffect(() => {
-
-})
 
 // set up data listener
 useEffect(() => {
@@ -171,25 +143,25 @@ useEffect(() => {
       // set state prodDetails
       console.log('----->>> Update params from HistoryScreen detected. Items passed: \n',
         {
-          lat1: route.params.p1Lat,
-          lon1: route.params.p1Lon,
-          lat2: route.params.p2Lat,
-          lon2: route.params.p2Lon,
+          prodTitle: route.params.p1Lat,
+          prodExpirationDate: route.params.p1Lon,
+          prodDateAdded: route.params.p2Lat,
+          prodDateToBin: route.params.p2Lon,
         }
       );
       // clear any values written by user before using history
       updateStateObject({
-        lat1: '',
-        lon1: '',
-        lat2: '',
-        lon2: '',
+        prodTitle: '',
+        prodExpirationDate: '',
+        prodDateAdded: '',
+        prodDateToBin: '',
       });
       // set values based on history params
       updateStateObject({
-        lat1: route.params.p1Lat,
-        lon1: route.params.p1Lon,
-        lat2: route.params.p2Lat,
-        lon2: route.params.p2Lon,
+        prodTitle: route.params.p1Lat,
+        prodExpirationDate: route.params.p1Lon,
+        prodDateAdded: route.params.p2Lat,
+        prodDateToBin: route.params.p2Lon,
       });
   
     }
@@ -207,94 +179,34 @@ useEffect(() => {
   ]);
 
 
-  function convertDistance (dist) {
-    // convert here according to distanceUnits state
-    if (distanceUnits === 'miles') {
-      return (dist *= 0.621371);
-      // (number from:
-      // https://www.splashlearn.com/math-vocabulary/kilometer-to-mile-conversion#:~:text=Multiply%20by%200.62137-,1%20kilometer%20is%20equal%20to%200.621371%20miles%20(often%20shortened%20to,number%20of%20kilometers%20by%200.621371.
-      // )
-    } else {
-      return dist;
-    };
-  };
-
-  function convertBearing (bear) {
-    // convert here according to bearingUnits state
-    if (bearingUnits === 'mils') {
-      return (bear *= 17.777778);
-      // (number from: 
-      // https://www.inchcalculator.com/convert/degree-to-mil/#:~:text=To%20convert%20a%20measurement%20in,ratio%3A%2017.777778%20mils%2Fdegree.&text=The%20angle%20in%20mils%20is,in%20degrees%20multiplied%20by%2017.777778.
-      // )
-    } else {
-      return bear;
-    };
-  };
-
-
-  // Converts from degrees to radians.
-  function toRadians(degrees) {
-    return (degrees * Math.PI) / 180;
-  }
-
-  // Converts from radians to degrees.
-  function toDegrees(radians) {
-    return (radians * 180) / Math.PI;
-  }
-
-  // Computes distance between two geo coordinates in kilometers.
-  function computeDistance(lat1, lon1, lat2, lon2) {
-    var R = 6371; // km (change this constant to get miles)
-    var dLat = ((lat2 - lat1) * Math.PI) / 180;
-    var dLon = ((lon2 - lon1) * Math.PI) / 180;
-    var a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return `${d}`;    // NOTE: removed round() to avoid double rounding error in conversion
-  }
-
-  // Computes bearing between two geocoordinates in degrees.
-  function computeBearing(startLat, startLng, destLat, destLng) {
-    startLat = toRadians(startLat);
-    startLng = toRadians(startLng);
-    destLat = toRadians(destLat);
-    destLng = toRadians(destLng);
-
-    var y = Math.sin(destLng - startLng) * Math.cos(destLat);
-    var x =
-      Math.cos(startLat) * Math.sin(destLat) -
-      Math.sin(startLat) * Math.cos(destLat) * Math.cos(destLng - startLng);
-    var brng = Math.atan2(y, x);
-    brng = toDegrees(brng);
-    return (brng + 360) % 360;
-  }
 
   function round(value, decimals) {
     return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
   }
 
   function validate(value) {
+    return !(value) ? 'Required field' : '';
+  }
+
+  function validateNum(value) {
     return isNaN(value) ? 'Must be a number' : '';
   }
 
   function formValid(vals) {
     if (
-      isNaN(vals.lat1) ||
-      isNaN(vals.lon1) ||
-      isNaN(vals.lat2) ||
-      isNaN(vals.lon2)
+      false
+      // (!vals.prodTitle) ||  // isNaN is true if NaN is returned after...
+      // isNaN(vals.prodExpirationDate) ||     // ... being converted to a number
+      // isNaN(vals.prodDateAdded) ||
+      // isNaN(vals.prodDateToBin) ||
+      // isNaN()
     ) {
       return false;
     } else if (
-      vals.lat1 === '' ||
-      vals.lon1 === '' ||
-      vals.lat2 === '' ||
-      vals.lon2 === ''
+      vals.prodTitle === '' ||
+      vals.prodExpirationDate === '' ||
+      vals.prodDateAdded === '' ||
+      vals.prodDateToBin === ''
     ) {
       return false;
     } else {
@@ -302,65 +214,8 @@ useEffect(() => {
     }
   }
 
-  const renderWeather = (weather) => {
-    if (weather.icon === '') {
-      return (<View></View>)
-    } else {
-      return (
-        <View style={{marginLeft: 9, marginRight: 9, marginTop: 10}}>
-          <View style={styles.weatherPointStyle}>
-              <View style={styles.weatherIconStyle}>
-                <Image
-                  source={ICONS['img' + weather.icon]}
-                  style={{width: 80, height: 80}}
-                  PlaceholderContent={<ActivityIndicator/>}
-                />
-              </View>
-            <View>
-              <Text style={styles.weatherTempStyle}>
-                {round(weather.temp, 0)}
-              </Text>
-              <Text style={styles.weatherDescStyle}>
-                {weather.weatherDesc}
-              </Text>
-            </View>
-            <Text style={styles.weatherPointNumberStyle}>
-              {weather.weatherPoint}
-            </Text>
-          </View>
-        </View>
-      )
-    }
-  };
 
 
-  function calculateResults() {
-    if (formValid(state)) {
-      var p1 = {
-        lat: parseFloat(state.lat1),
-        lon: parseFloat(state.lon1),
-      };
-      var p2 = {
-        lat: parseFloat(state.lat2),
-        lon: parseFloat(state.lon2),
-      };
-
-      // compute into kilometers
-      var dist = computeDistance(p1.lat, p1.lon, p2.lat, p2.lon);
-      // compute into degrees
-      var bear = computeBearing(p1.lat, p1.lon, p2.lat, p2.lon);
-
-      // convert (if necessary <-- "if" is handled in the function)
-      dist = convertDistance(dist);
-      bear = convertBearing(bear);
-
-      updateStateObject({
-        distance: `${round(dist, 3)} ${distanceUnits}`,
-        bearing: `${round(bear, 3)} ${bearingUnits}`,
-      });
-      Keyboard.dismiss();
-    }
-  };
 
 
   // render the item WITH error catching
@@ -371,20 +226,21 @@ useEffect(() => {
         activeOpacity={0.6}
         underlayColor='#8EC861'  
         onPress={() => {
-            navigation.navigate(
-              'Home Screen',
-              { // lat and lon info to pass back
-                p1Lat: item.p1.lat,
-                p1Lon: item.p1.lon,
-                p2Lat: item.p2.lat,
-                p2Lon: item.p2.lon,
-              }
-            );
+            // navigation.navigate(
+            //   'Co-Pantry',
+            //   { // lat and lon info to pass back
+            //     p1Lat: item.prodDetails.lat,
+            //     p1Lon: item.prodDetails.lon,
+            //     p2Lat: item.prodDetails.lat,
+            //     p2Lon: item.prodDetails.lon,
+            //   }
+            // );
+            console.log("Item Pressed: ", item);
           }}
         >
           <View>
-            <Text style={styles.historyTextStyle}> Start: {item.p1.lat}, {item.p1.lon} </Text>
-            <Text style={styles.historyTextStyle}> End: {item.p2.lat}, {item.p2.lon} </Text>
+            <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
+            {/* <Text style={styles.historyTextStyle}> End: {item.state.lat}, {item.state.prodDetails.lon} </Text> */}
             <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
           </View>
         </TouchableHighlight>
@@ -405,37 +261,50 @@ useEffect(() => {
   
   return (
     <Padder>
+      <Text> Product Name: </Text>
       <Input
-        placeholder='Enter latitude for point 1'
-        value={state.lat1.toString()}
+        placeholder='Enter product name'
+        value={state.prodTitle.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
-        errorMessage={validate(state.lat1)}
-        onChangeText={(val) => updateStateObject({ lat1: val })}
+        errorMessage={validate(state.prodTitle)}
+        onChangeText={(val) => updateStateObject({ prodTitle: val })}
       />
+      <Text> Expiration Date: </Text>
       <Input
-        placeholder='Enter longitude for point 1'
-        value={state.lon1.toString()}
+        placeholder='Enter expiration date'
+        value={state.prodExpirationDate.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
-        errorMessage={validate(state.lon1)}
-        onChangeText={(val) => updateStateObject({ lon1: val })}
+        errorMessage={validate(state.prodExpirationDate)}
+        onChangeText={(val) => updateStateObject({ prodExpirationDate: val })}
       />
+      <Text> Date to Throw Away: </Text>
       <Input
-        placeholder='Enter latitude for point 2'
-        value={state.lat2.toString()}
+        placeholder='Enter the date to throw it away'
+        value={state.prodDateToBin.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
-        errorMessage={validate(state.lat2)}
-        onChangeText={(val) => updateStateObject({ lat2: val })}
+        errorMessage={validate(state.prodDateToBin)}
+        onChangeText={(val) => updateStateObject({ prodDateToBin: val })}
       />
+      <Text> Price: </Text>
       <Input
-        placeholder='Enter longitude for point 2'
-        value={state.lon2.toString()}
+        placeholder='Enter product price'
+        value={state.prodPrice} // WIP FIXME .toString()?
         autoCorrect={false}
         errorStyle={styles.input}
-        errorMessage={validate(state.lon2)}
-        onChangeText={(val) => updateStateObject({ lon2: val })}
+        // errorMessage={validateNum(state.prodDateToBin)}
+        onChangeText={(val) => updateStateObject({ prodPrice: val })}
+      />
+      <Text> Picture: </Text>
+      <Input
+        placeholder='Tap to Take a Picture'
+        value={state.prodThumbnail}   // WIP FIXME .toString()?
+        autoCorrect={false}
+        errorStyle={styles.input}
+        // errorMessage={validateNum(state.lon2)}
+        onChangeText={(val) => updateStateObject({ prodThumbnail: val })}
       />
 
       <Padder>
@@ -443,61 +312,29 @@ useEffect(() => {
           style={styles.buttons}
           title='Calculate'
           onPress={() => {
-            calculateResults();
             // create timestamp and store the points to persistent Firebase DB memory
-            if (formValid(state) === true) { // (repeated line, also in calculateResults())
-              var p1 = {
-                lat: parseFloat(state.lat1),
-                lon: parseFloat(state.lon1),
-              };
-              var p2 = {
-                lat: parseFloat(state.lat2),
-                lon: parseFloat(state.lon2),
-              };
+            // if (formValid(state) === true) {
               let timeOfCalc = new Date().toString();
-              storeHistoryItem({p1, p2, timeOfCalc});
-              // get and set weather for start point
-              // clear weather first
-              updateWeatherState1({
-                // weatherError: false,
-                weatherDesc: '',
-                temp: '',
-                icon: '',
-              });
-              updateWeatherState2({
-                // weatherError: false,
-                weatherDesc: '',
-                temp: '',
-                icon: '',
-              });
-              getWeather(state.lat1, state.lon1, (data1) => {
-                console.log('DATA1: ', data1);
-                updateWeatherState1({
-                  weatherDesc: data1.weather[0].main,
-                  temp: data1.main.temp,
-                  icon: data1.weather[0].icon,
-                })
-              });
+              // let prodDetails = state.prodDetails;
+              storeHistoryItem({state, timeOfCalc});
 
-              // get and set weather for end point
-              getWeather(state.lat2, state.lon2, (data2) => {
-                console.log('DATA2: ', data2);
-                updateWeatherState2({
-                  weatherDesc: data2.weather[0].main,
-                  temp: data2.main.temp,
-                  icon: data2.weather[0].icon,
-                })
-              });
-              
-              // // stuff for testing request status
-              // getStatus(state.lat1, state.lon1, (dataStatus1) => {
-              //   console.log('--- data1 status: ', dataStatus1);
-              // });
-              // getStatus(state.lat2, state.lon2, (dataStatus2) => {
-              //   console.log('--- data2 status: ', dataStatus2);
-              // });
 
-            };
+
+
+
+
+
+
+            // FORMVALID NEEDS FIX
+
+
+
+
+
+
+
+
+            // };
           }}
         />
       </Padder>
@@ -509,76 +346,25 @@ useEffect(() => {
           onPress={() => {
             Keyboard.dismiss();
             setState({
-              lat1: '',
-              lon1: '',
-              lat2: '',
-              lon2: '',
-              distance: '',
-              bearing: '',
+              prodTitle: '',
+              prodExpirationDate: '',
+              prodDateAdded: '',
+              prodDateToBin: '',
+              prodIsExpired: '',
+              prodThumbnail: '',
             });
-            updateWeatherState1({
-              // weatherError: false,
-              weatherDesc: '',
-              temp: '',
-              icon: '',
-            });
-            updateWeatherState2({
-              // weatherError: false,
-              weatherDesc: '',
-              temp: '',
-              icon: '',
-            });
+            
+            // WIP FIXME----------------------------------
             // reset params so can click similar history
-            route.params.p1Lat = '';
-            route.params.p1Lon = '';
-            route.params.p2Lat = '';
-            route.params.p2Lon = '';
+            // route.params.p1Lat = '';
+            // route.params.p1Lon = '';
+            // route.params.p2Lat = '';
+            // route.params.p2Lon = '';
           }}
         />
       </Padder>
 
 
-      
-      {/*
-      <Padder>
-        <Button
-          style={styles.buttons}
-          title='Send Req and LOG'
-          onPress={() => {
-            console.log('-------- FROM HOME --------');
-            console.log('ASYNC -- returned weather JSON:' );
-            // test data that should return 'Allendale' for "name":
-              // let lat = 42.97199453892559;
-              // let lon = -85.89032577316132;
-            getWeather(state.lat1, state.lon1, (data) => {
-              console.log('DATA: ', data);
-              updateWeatherState1({
-                weatherDesc: data.weather[0].main,
-                temp: data.main.temp,
-                icon: data.weather[0].icon,
-              });
-              // console.log('weatherState1: ', weatherState1);
-              console.log('---------------------------------');
-            });
-          }}
-        />
-      </Padder>
-      */}
-
-      {/*          
-      <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG weatherState1 and weatherState2'
-          onPress={() => {
-            console.log('-------- FROM HOME --------');
-            console.log('weatherState1: ', weatherState1);
-            console.log('weatherState2: ', weatherState2);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder>
-      */}
 
       {/* 
       <Padder>
@@ -606,27 +392,14 @@ useEffect(() => {
               'history params: ', 
               {lat1: route.params.p1Lat,
               lon1: route.params.p1Lon,
-              lat2: route.params.p2Lat,
-              lon2: route.params.p2Lon}
+              prodDateAdded: route.params.p2Lat,
+              prodDateToBin: route.params.p2Lon}
             );
             console.log('---------------------------------');
           }}
         />
       </Padder> */}
 
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='DB STORE TEST'
-          onPress={() => {
-            console.log('-------- FROM HOME --------');
-            // writeData('score', {distanceUnits, bearingUnits});
-            // writeData('score', ['wankeeeeeeeerrrr', 'shaaaank']);
-            storeHistoryItem(['persistant test']);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder> */}
 
       {/* <Padder>
         <Button
