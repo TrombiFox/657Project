@@ -12,9 +12,9 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './screens/HomeScreen';
+import AddScreen from './screens/AddScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import HistoryScreen from './screens/HistoryScreen';
+import PantryListScreen from './screens/PantryListScreen';
 
 
 export default function App() {
@@ -44,15 +44,15 @@ export default function App() {
           >
             <Stack.Screen
               name='Co-Pantry'
-              component={HomeScreen}
+              component={PantryListScreen}
+            />
+            <Stack.Screen
+              name='Add Item'
+              component={AddScreen}
             />
             <Stack.Screen
               name='Settings'
               component={SettingsScreen}
-            />
-            <Stack.Screen
-              name='History'
-              component={HistoryScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>

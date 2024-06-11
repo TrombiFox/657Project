@@ -12,15 +12,15 @@ import {
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Padder from '../components/Padder';
-import { FontAwesome } from '@expo/vector-icons';
 import {
   inithw4DB,
   storeHistoryItem,
   setupHistoryListener,
 } from '../helpers/fb-CoPantry';
+import { AntDesign } from '@expo/vector-icons';
  
 
-const HomeScreen = ({ route, navigation }) => {
+const AddScreen = ({ route, navigation }) => {
   
   const prodDetails = {
     prodTitle: '',
@@ -59,8 +59,6 @@ useEffect(() => {
 }, []);
   
 
-  const [distanceUnits, setDistanceUnits] = useState('kilometers');
-  const [bearingUnits, setBearingUnits] = useState('degrees');
   const [state, setState] = useState(prodDetails);
 
   const updateStateObject = (vals) => {
@@ -74,86 +72,90 @@ useEffect(() => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate(
-              'Settings',
-              {distanceUnits: distanceUnits,
-              bearingUnits: bearingUnits},
-            );
-            console.log('headerRight (Settings) clicked!');
-            Keyboard.dismiss();
-          }}
-        >
-          <FontAwesome name="gears" size={24} color="black"/>
-        </TouchableOpacity>
-      ),
-      // headerTitleAlign: 'center',  // left here for my own note (how to change style individually)
-      // backgroundColor: '#B9DE8A',
+      // headerRight: () => (
+      //   <TouchableOpacity
+      //     onPress={() => {
+      //       navigation.navigate(
+      //         'Settings',
+      //         {distanceUnits: distanceUnits,
+      //         bearingUnits: bearingUnits},
+      //       );
+      //       console.log('headerRight (Settings) clicked!');
+      //       Keyboard.dismiss();
+      //     }}
+      //   >
+      //     <FontAwesome name="gears" size={24} color="black"/>
+      //   </TouchableOpacity>
+      // ),
+      // // headerTitleAlign: 'center',  // left here for my own note (how to change style individually)
+      // // backgroundColor: '#B9DE8A',
       headerLeft: () => (
         <TouchableOpacity
+          style={styles.navTouchStyle}
           onPress={() => {
             navigation.navigate(
-              'History',
+              'Co-Pantry',
               {historyState}
             );
-            console.log('headerLeft (History) clicked!');
+            console.log('headerLeft (To Co-Pantry) clicked!');
             Keyboard.dismiss();
           }}
         >
-          <Text style={styles.navTextStyle}> History </Text>
+          <AntDesign name="left" size={24} color="black" />
+          <Text style={styles.navTextStyle}> Cancel </Text>
         </TouchableOpacity>
       )
     });
-    if (route.params?.valueD) {
-      setDistanceUnits(route.params.valueD);
-    };
-    if (route.params?.valueB) {
-      setBearingUnits(route.params.valueB);
-    };
 
-    if (
-      route.params?.p1Lat &&
-      route.params?.p1Lon &&
-      route.params?.p2Lat &&
-      route.params?.p2Lon
-    ) {
-      // set state prodDetails
-      console.log('----->>> Update params from HistoryScreen detected. Items passed: \n',
-        {
-          prodTitle: route.params.p1Lat,
-          prodExpirationDate: route.params.p1Lon,
-          prodDateAdded: route.params.p2Lat,
-          prodDateToBin: route.params.p2Lon,
-        }
-      );
-      // clear any values written by user before using history
-      updateStateObject({
-        prodTitle: '',
-        prodExpirationDate: '',
-        prodDateAdded: '',
-        prodDateToBin: '',
-      });
-      // set values based on history params
-      updateStateObject({
-        prodTitle: route.params.p1Lat,
-        prodExpirationDate: route.params.p1Lon,
-        prodDateAdded: route.params.p2Lat,
-        prodDateToBin: route.params.p2Lon,
-      });
+    ////////// bearing and distance left to avoid error temporarily
+    // if (route.params?.valueD) {
+    //   setDistanceUnits(route.params.valueD);
+    // };
+    // if (route.params?.valueB) {
+    //   setBearingUnits(route.params.valueB);
+    // };
+
+    // if (
+    //   route.params?.p1Lat &&
+    //   route.params?.p1Lon &&
+    //   route.params?.p2Lat &&
+    //   route.params?.p2Lon
+    // ) {
+    //   // set state prodDetails
+    //   console.log('----->>> Update params from HistoryScreen detected. Items passed: \n',
+    //     {
+    //       prodTitle: route.params.p1Lat,
+    //       prodExpirationDate: route.params.p1Lon,
+    //       prodDateAdded: route.params.p2Lat,
+    //       prodDateToBin: route.params.p2Lon,
+    //     }
+    //   );
+    //   // clear any values written by user before using history
+    //   updateStateObject({
+    //     prodTitle: '',
+    //     prodExpirationDate: '',
+    //     prodDateAdded: '',
+    //     prodDateToBin: '',
+    //   });
+    //   // set values based on history params
+    //   updateStateObject({
+    //     prodTitle: route.params.p1Lat,
+    //     prodExpirationDate: route.params.p1Lon,
+    //     prodDateAdded: route.params.p2Lat,
+    //     prodDateToBin: route.params.p2Lon,
+    //   });
   
-    }
+    // }
   },
   [
-    route.params?.valueD,
-    route.params?.valueB,
-    route.params?.p1Lat,
-    route.params?.p1Lon,
-    route.params?.p2Lat,
-    route.params?.p2Lon,
-    distanceUnits,
-    bearingUnits,
+    // route.params?.valueD,
+    // route.params?.valueB,
+    // route.params?.p1Lat,
+    // route.params?.p1Lon,
+    // route.params?.p2Lat,
+    // route.params?.p2Lon,
+    // distanceUnits,
+    // bearingUnits,
     // historyState, <-- infinite loop no touchy
   ]);
 
@@ -193,47 +195,47 @@ useEffect(() => {
   }
 
 
-  // render the item WITH error catching
-  let renderHistory = ({ index, item }) => {
-    try {
-      return(
-        <TouchableHighlight style={styles.renderItemStyle}
-        activeOpacity={0.6}
-        underlayColor='#8EC861'  
-        onPress={() => {
-            // navigation.navigate(
-            //   'Co-Pantry',
-            //   { // lat and lon info to pass back
-            //     p1Lat: item.prodDetails.lat,
-            //     p1Lon: item.prodDetails.lon,
-            //     p2Lat: item.prodDetails.lat,
-            //     p2Lon: item.prodDetails.lon,
-            //   }
-            // );
-            console.log("Item Pressed: ", item);
-          }}
-        >
-          <View>
-            <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
-            <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
-            <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
-            <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
-          </View>
-        </TouchableHighlight>
-      );
-    } catch (e) {
-      return(
-        <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
-      );
-    }
-  };
+  // // render the item WITH error catching
+  // let renderHistory = ({ index, item }) => {
+  //   try {
+  //     return(
+  //       <TouchableHighlight style={styles.renderItemStyle}
+  //       activeOpacity={0.6}
+  //       underlayColor='#8EC861'  
+  //       onPress={() => {
+  //           // navigation.navigate(
+  //           //   'Co-Pantry',
+  //           //   { // lat and lon info to pass back
+  //           //     p1Lat: item.prodDetails.lat,
+  //           //     p1Lon: item.prodDetails.lon,
+  //           //     p2Lat: item.prodDetails.lat,
+  //           //     p2Lon: item.prodDetails.lon,
+  //           //   }
+  //           // );
+  //           console.log("Item Pressed: ", item);
+  //         }}
+  //       >
+  //         <View>
+  //           <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
+  //           <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
+  //           <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
+  //           <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
+  //         </View>
+  //       </TouchableHighlight>
+  //     );
+  //   } catch (e) {
+  //     return(
+  //       <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
+  //     );
+  //   }
+  // };
 
 
-  let itemSeparatorRender= () => {
-    return(
-      <Text style={{backgroundColor: 'black', height: 1}}> </Text>
-    )
-  }
+  // let itemSeparatorRender= () => {
+  //   return(
+  //     <Text style={{backgroundColor: 'black', height: 1}}> </Text>
+  //   )
+  // }
   
   return (
     <Padder>
@@ -267,7 +269,7 @@ useEffect(() => {
       <Text> Price: </Text>
       <Input
         placeholder='Enter product price'
-        value={state.prodPrice} // WIP FIXME .toString()?
+        value={state.prodPrice.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateIsNum(state.prodPrice)}
@@ -276,7 +278,7 @@ useEffect(() => {
       <Text> Picture: </Text>
       <Input
         placeholder='Tap to Take a Picture'
-        value={state.prodThumbnail}   // WIP FIXME .toString()?
+        value={state.prodThumbnail}
         autoCorrect={false}
         errorStyle={styles.input}
         // errorMessage={validateNum(state.lon2)}
@@ -291,25 +293,7 @@ useEffect(() => {
             // create timestamp and store the points to persistent Firebase DB memory
             if (formValid(state) === true) {
               let timeOfCalc = new Date().toString();
-              // let prodDetails = state.prodDetails;
               storeHistoryItem({state, timeOfCalc});
-
-
-
-
-
-
-
-
-            // FORMVALID NEEDS FIX
-
-
-
-
-
-
-
-
             };
           }}
         />
@@ -321,13 +305,15 @@ useEffect(() => {
           title='Clear'
           onPress={() => {
             Keyboard.dismiss();
-            setState({
+            updateStateObject({
               prodTitle: '',
               prodExpirationDate: '',
-              prodDateToBin: '',
               prodDateAdded: '',
-              prodPrice: '',
+              prodDateToBin: '',
+              prodIsExpired: false,
               prodThumbnail: '',
+              prodPrice: '',
+              prodBarcode: '',
             });
             
             // WIP FIXME----------------------------------
@@ -348,10 +334,10 @@ useEffect(() => {
           style={styles.buttons}
           title='LOG'
           onPress={() => {
-            console.log('-------- FROM HOME --------');
-            console.log('route.params in HOME (from Settings):', route.params);
-            console.log('actual distanceUnits in HOME:', distanceUnits);
-            console.log('actual bearingUnits in HOME:', bearingUnits);
+            console.log('-------- FROM ADD --------');
+            console.log('route.params in ADD (from Settings):', route.params);
+            console.log('actual distanceUnits in ADD:', distanceUnits);
+            console.log('actual bearingUnits in ADD:', bearingUnits);
             console.log('---------------------------------');
           }}
         />
@@ -363,7 +349,7 @@ useEffect(() => {
           style={styles.buttons}
           title='LOG History params'
           onPress={() => {
-            console.log('-------- FROM HOME --------');
+            console.log('-------- FROM ADD --------');
             console.log(
               'history params: ', 
               {lat1: route.params.p1Lat,
@@ -382,7 +368,7 @@ useEffect(() => {
           style={styles.buttons}
           title='LOG historyState'
           onPress={() => {
-            console.log('-------- FROM HOME --------');
+            console.log('-------- FROM ADD --------');
             console.log('historyState: ', historyState);
             console.log('---------------------------------');
           }}
@@ -394,7 +380,7 @@ useEffect(() => {
           style={styles.buttons}
           title='LOG state'
           onPress={() => {
-            console.log('-------- FROM HOME --------');
+            console.log('-------- FROM ADD --------');
             console.log('state: ', state);
             console.log('---------------------------------');
           }}
@@ -499,9 +485,14 @@ const styles = StyleSheet.create({
     padding: 5,
     fontWeight: 'bold',
   },
+  navTouchStyle: {
+    flexDirection: 'row',
+    justifyContet: 'flex-end',
+    alignItems: 'center',
+  },
   navTextStyle: {
     fontSize: 15,
   },
 });
 
-export default HomeScreen;
+export default AddScreen;

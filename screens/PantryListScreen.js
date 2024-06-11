@@ -2,28 +2,49 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Keyboard, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import Padder from '../components/Padder';
 import { setupHistoryListener } from '../helpers/fb-CoPantry';
-import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
-const HistoryScreen = ({ route, navigation }) => {
+
+const PantryListScreen = ({ route, navigation }) => {
   
   // to save history
   // to save history (list of all current products)
 const [historyState, setHistoryState] = useState([]);
 
+const [distanceUnits, setDistanceUnits] = useState('kilometers');
+const [bearingUnits, setBearingUnits] = useState('degrees');
+
   useEffect(() => {
     navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(
+              'Settings',
+              {distanceUnits: distanceUnits,
+              bearingUnits: bearingUnits},
+            );
+            console.log('headerRight (Settings) clicked!');
+            Keyboard.dismiss();
+          }}
+        >
+          <FontAwesome name="gears" size={24} color="black"/>
+        </TouchableOpacity>
+      ),
+      // headerTitleAlign: 'center',  // left here for my own note (how to change style individually)
+      // backgroundColor: '#B9DE8A',
       headerLeft: () => (
         <TouchableOpacity
           style={styles.navTouchStyle}
           onPress={() => {
             navigation.navigate(
-              'Co-Pantry'
+              'Add Item'
             );
-            console.log('headerLeft (Back to HOME) clicked!');
+            console.log('headerLeft (Add Item) clicked!');
           }}
         >
-          <AntDesign name="left" size={24} color="black" />
-          <Text style={styles.navTextStyle}> Home </Text>
+          
+          <Text style={styles.navTextStyle}> Add Item </Text>
         </TouchableOpacity>
       ),
     })
@@ -153,5 +174,5 @@ const styles = StyleSheet.create({
     }
   });
   
-  export default HistoryScreen;
+  export default PantryListScreen;
   
