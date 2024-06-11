@@ -1,8 +1,10 @@
 import { Button, Input, Image } from '@rneui/themed';
 import { 
+  FlatList,
   Keyboard,
   StyleSheet,
   Text,
+  TouchableHighlight,
   TouchableOpacity,
   View,
   ActivityIndicator,
@@ -38,9 +40,11 @@ const ICONS = {
  };
  
 
-const CalculatorScreen = ({ route, navigation }) => {
+const HomeScreen = ({ route, navigation }) => {
   
-  const measurements = {
+  const prodDetails = {
+    // prodTitle:
+    // prod
     lat1: '',
     lon1: '',
     lat2: '',
@@ -105,7 +109,7 @@ useEffect(() => {
 
   const [distanceUnits, setDistanceUnits] = useState('kilometers');
   const [bearingUnits, setBearingUnits] = useState('degrees');
-  const [state, setState] = useState(measurements);
+  const [state, setState] = useState(prodDetails);
 
   const updateStateObject = (vals) => {
     // console.log('---- In updateStateObject ', vals);
@@ -164,7 +168,7 @@ useEffect(() => {
       route.params?.p2Lat &&
       route.params?.p2Lon
     ) {
-      // set state measurements
+      // set state prodDetails
       console.log('----->>> Update params from HistoryScreen detected. Items passed: \n',
         {
           lat1: route.params.p1Lat,
@@ -358,6 +362,46 @@ useEffect(() => {
     }
   };
 
+
+  // render the item WITH error catching
+  let renderHistory = ({ index, item }) => {
+    try {
+      return(
+        <TouchableHighlight style={styles.renderItemStyle}
+        activeOpacity={0.6}
+        underlayColor='#8EC861'  
+        onPress={() => {
+            navigation.navigate(
+              'Home Screen',
+              { // lat and lon info to pass back
+                p1Lat: item.p1.lat,
+                p1Lon: item.p1.lon,
+                p2Lat: item.p2.lat,
+                p2Lon: item.p2.lon,
+              }
+            );
+          }}
+        >
+          <View>
+            <Text style={styles.historyTextStyle}> Start: {item.p1.lat}, {item.p1.lon} </Text>
+            <Text style={styles.historyTextStyle}> End: {item.p2.lat}, {item.p2.lon} </Text>
+            <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
+          </View>
+        </TouchableHighlight>
+      );
+    } catch (e) {
+      return(
+        <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
+      );
+    }
+  };
+
+
+  let itemSeparatorRender= () => {
+    return(
+      <Text style={{backgroundColor: 'black', height: 1}}> </Text>
+    )
+  }
   
   return (
     <Padder>
@@ -501,7 +545,7 @@ useEffect(() => {
           style={styles.buttons}
           title='Send Req and LOG'
           onPress={() => {
-            console.log('-------- FROM CALCULATOR --------');
+            console.log('-------- FROM HOME --------');
             console.log('ASYNC -- returned weather JSON:' );
             // test data that should return 'Allendale' for "name":
               // let lat = 42.97199453892559;
@@ -527,7 +571,7 @@ useEffect(() => {
           style={styles.buttons}
           title='LOG weatherState1 and weatherState2'
           onPress={() => {
-            console.log('-------- FROM CALCULATOR --------');
+            console.log('-------- FROM HOME --------');
             console.log('weatherState1: ', weatherState1);
             console.log('weatherState2: ', weatherState2);
             console.log('---------------------------------');
@@ -542,10 +586,10 @@ useEffect(() => {
           style={styles.buttons}
           title='LOG'
           onPress={() => {
-            console.log('-------- FROM CALCULATOR --------');
-            console.log('route.params in Calculator (from Settings):', route.params);
-            console.log('actual distanceUnits in Calculator:', distanceUnits);
-            console.log('actual bearingUnits in Calculator:', bearingUnits);
+            console.log('-------- FROM HOME --------');
+            console.log('route.params in HOME (from Settings):', route.params);
+            console.log('actual distanceUnits in HOME:', distanceUnits);
+            console.log('actual bearingUnits in HOME:', bearingUnits);
             console.log('---------------------------------');
           }}
         />
@@ -557,7 +601,7 @@ useEffect(() => {
           style={styles.buttons}
           title='LOG History params'
           onPress={() => {
-            console.log('-------- FROM CALCULATOR --------');
+            console.log('-------- FROM HOME --------');
             console.log(
               'history params: ', 
               {lat1: route.params.p1Lat,
@@ -575,7 +619,7 @@ useEffect(() => {
           style={styles.buttons}
           title='DB STORE TEST'
           onPress={() => {
-            console.log('-------- FROM CALCULATOR --------');
+            console.log('-------- FROM HOME --------');
             // writeData('score', {distanceUnits, bearingUnits});
             // writeData('score', ['wankeeeeeeeerrrr', 'shaaaank']);
             storeHistoryItem(['persistant test']);
@@ -589,7 +633,7 @@ useEffect(() => {
           style={styles.buttons}
           title='LOG historyState'
           onPress={() => {
-            console.log('-------- FROM CALCULATOR --------');
+            console.log('-------- FROM HOME --------');
             console.log('historyState: ', historyState);
             console.log('---------------------------------');
           }}
@@ -601,7 +645,7 @@ useEffect(() => {
           style={styles.buttons}
           title='LOG state'
           onPress={() => {
-            console.log('-------- FROM CALCULATOR --------');
+            console.log('-------- FROM HOME --------');
             console.log('state: ', state);
             console.log('---------------------------------');
           }}
@@ -610,7 +654,7 @@ useEffect(() => {
 
 
       {/* CAPITALIZE FIRST LETTER IF POSSIBLE? */}
-      <Padder>
+      {/* <Padder>
         <View style={styles.resultsView}>
             <Text style={styles.allResults}>
               Distance:
@@ -623,17 +667,43 @@ useEffect(() => {
             </Text>
             <Text style={{...styles.resultsText, ...styles.allResults}}> {state.bearing} </Text>
         </View>
-      </Padder>
+      </Padder> */}
 
+
+      <Padder>
+        <View style={{height: '60%'}}>
+          <FlatList
+            // keyExtracor={(item) => item.text}
+            data={historyState}
+            renderItem={renderHistory}
+            ItemSeparatorComponent={itemSeparatorRender}
+            extraData={historyState}
+          />
+        </View>
+      </Padder>
       
-      {renderWeather(weatherState1)}
-      {renderWeather(weatherState2)}
+      {/* {renderWeather(weatherState1)}
+      {renderWeather(weatherState2)} */}
 
   </Padder>  
   );
 };
 
 const styles = StyleSheet.create({
+  renderItemStyle: {
+    padding: 2,
+    // borderBottomWidth: 1,
+    borderColor: 'black',
+  },
+  historyTextStyle: {
+    fontSize: 18,
+  },
+  timestampStyle: {
+    // borderWidth: 1,
+    alignSelf: 'flex-end',
+    fontSize: 12,
+    fontStyle: 'italic',
+  },
   buttons: {
     margin: 10,
   },
@@ -685,4 +755,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CalculatorScreen;
+export default HomeScreen;

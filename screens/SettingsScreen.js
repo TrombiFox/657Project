@@ -42,7 +42,7 @@ const SettingsScreen = ({ route, navigation }) => {
             console.log('valueD after Save clicked:', valueD);
             console.log('valueB after Save clicked:', valueB);
             navigation.navigate(
-              'Geo Calculator',
+              'Co-Pantry',
               {
                 valueD,
                 valueB,
@@ -57,7 +57,7 @@ const SettingsScreen = ({ route, navigation }) => {
       headerLeft: () => (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Geo Calculator');
+            navigation.navigate('Co-Pantry');
             console.log('headerLeft (Cancel) clicked!');
           }}
         >
@@ -125,7 +125,7 @@ const SettingsScreen = ({ route, navigation }) => {
           title='LOG'
           onPress={() => {
             console.log('-------- FROM SETTINGS --------');
-            console.log('route.params in Settings (from Calculator):', route.params);
+            console.log('route.params in Settings (from HOME):', route.params);
             // console.log('currentUnitTypes: ', currentUnitTypes);
             console.log('valueD from Settings:', valueD);
             console.log('valueB from Settings:', valueB);

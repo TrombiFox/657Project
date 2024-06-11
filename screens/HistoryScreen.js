@@ -16,13 +16,13 @@ const HistoryScreen = ({ route, navigation }) => {
           style={styles.navTouchStyle}
           onPress={() => {
             navigation.navigate(
-              'Geo Calculator'
+              'Co-Pantry'
             );
-            console.log('headerLeft (Back to Calculator) clicked!');
+            console.log('headerLeft (Back to HOME) clicked!');
           }}
         >
           <AntDesign name="left" size={24} color="black" />
-          <Text style={styles.navTextStyle}> Geo Calculator </Text>
+          <Text style={styles.navTextStyle}> Home </Text>
         </TouchableOpacity>
       ),
     })
@@ -43,7 +43,7 @@ const HistoryScreen = ({ route, navigation }) => {
         underlayColor='#8EC861'  
         onPress={() => {
             navigation.navigate(
-              'Geo Calculator',
+              'Co-Pantry',
               { // lat and lon info to pass back
                 p1Lat: item.p1.lat,
                 p1Lon: item.p1.lon,

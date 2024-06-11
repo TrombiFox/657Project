@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import CalculatorScreen from './screens/CalculatorScreen';
+import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import HistoryScreen from './screens/HistoryScreen';
 
@@ -23,7 +23,7 @@ export default function App() {
 
   // common screens options found at:
   // https://reactnavigation.org/docs/headers/#sharing-common-options-across-screens
-  //found hint toward understanding the theme for the background at:
+  // found hint toward understanding the theme for the background at:
   // https://www.reddit.com/r/reactnative/comments/ifp01k/questions_background_colour_and_react_navigation/
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -39,12 +39,12 @@ export default function App() {
               headerTitleStyle: {
                 fontWeight: 'bold',
               },
-              background: '#8EC861', // (attempted, but does nothing)
+              // background: '#8EC861', // (attempted, but does nothing)
             }}
           >
             <Stack.Screen
-              name='Geo Calculator'
-              component={CalculatorScreen}
+              name='Co-Pantry'
+              component={HomeScreen}
             />
             <Stack.Screen
               name='Settings'
