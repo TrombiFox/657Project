@@ -7,7 +7,8 @@ import { AntDesign } from '@expo/vector-icons';
 const HistoryScreen = ({ route, navigation }) => {
   
   // to save history
-  const [historyHistoryState, setHistoryHistoryState] = useState([]);
+  // to save history (list of all current products)
+const [historyState, setHistoryState] = useState([]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -28,60 +29,73 @@ const HistoryScreen = ({ route, navigation }) => {
     })
     setupHistoryListener((items) => {
       // console.log('setting HistoryScreen with: ', items);
-      setHistoryHistoryState(items); // can sort with self-defined method like: (items.sort(comparator));
+      setHistoryState(items); // can sort with self-defined method like: (items.sort(comparator));
       // historyStateTest = historyState;
     });
   }, []);
   
-
-  // render the item WITH error catching
-  let renderHistory = ({ index, item }) => {
-    try {
-      return(
-        <TouchableHighlight style={styles.renderItemStyle}
-        activeOpacity={0.6}
-        underlayColor='#8EC861'  
-        onPress={() => {
-            navigation.navigate(
-              'Co-Pantry',
-              { // lat and lon info to pass back
-                p1Lat: item.p1.lat,
-                p1Lon: item.p1.lon,
-                p2Lat: item.p2.lat,
-                p2Lon: item.p2.lon,
-              }
-            );
-          }}
-        >
-          <View>
-            <Text style={styles.historyTextStyle}> Start: {item.p1.lat}, {item.p1.lon} </Text>
-            <Text style={styles.historyTextStyle}> End: {item.p2.lat}, {item.p2.lon} </Text>
-            <Text style={styles.timestampStyle}> {item.timeOfCalc} </Text>
-          </View>
-        </TouchableHighlight>
-      );
-    } catch (e) {
-      return(
-        <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
-      );
-    }
-  };
-
-
-  let itemSeparatorRender= () => {
+// render the item WITH error catching
+let renderHistory = ({ index, item }) => {
+  try {
     return(
-      <Text style={{backgroundColor: 'black', height: 1}}> </Text>
-    )
+      <TouchableHighlight style={styles.renderItemStyle}
+      activeOpacity={0.6}
+      underlayColor='#8EC861'  
+      onPress={() => {
+          // navigation.navigate(
+          //   'Co-Pantry',
+          //   { // lat and lon info to pass back
+          //     p1Lat: item.prodDetails.lat,
+          //     p1Lon: item.prodDetails.lon,
+          //     p2Lat: item.prodDetails.lat,
+          //     p2Lon: item.prodDetails.lon,
+          //   }
+          // );
+          console.log("Item Pressed: ", item);
+        }}
+      >
+        <View>
+          <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
+          <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
+          <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
+          <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
+        </View>
+      </TouchableHighlight>
+    );
+  } catch (e) {
+    return(
+      <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
+    );
   }
+};
+
+
+let itemSeparatorRender= () => {
+  return(
+    <Text style={{backgroundColor: 'black', height: 1}}> </Text>
+  )
+}
+
 
   return (
     <Padder>
-      <FlatList
-        // keyExtracor={(item) => item.text}
-        data={historyHistoryState}
-        renderItem={renderHistory}
-        ItemSeparatorComponent={itemSeparatorRender}
-      />
+      
+      <View style={{height: '100%'}}>
+          <FlatList
+            // keyExtracor={(item) => item.text}
+            data={historyState}
+            renderItem={renderHistory}
+            ItemSeparatorComponent={itemSeparatorRender}
+            extraData={historyState}
+          />
+        </View>
+
+
+
+
+
+
+
 
 
       {/* <Padder>

@@ -18,26 +18,6 @@ import {
   storeHistoryItem,
   setupHistoryListener,
 } from '../helpers/fb-CoPantry';
-import { getWeather, getStatus } from '../api/OWServer';
-
-const ICONS = {
-  img01d: require('../assets/images/img01d.png'),
-  img01n: require('../assets/images/img01n.png'),
-  img02d: require('../assets/images/img02d.png'),
-  img02n: require('../assets/images/img02n.png'),
-  img03d: require('../assets/images/img03d.png'),
-  img03n: require('../assets/images/img03n.png'),
-  img04d: require('../assets/images/img04d.png'),
-  img04n: require('../assets/images/img04n.png'),
-  img09d: require('../assets/images/img09d.png'),
-  img09n: require('../assets/images/img09n.png'),
-  img10d: require('../assets/images/img10d.png'),
-  img10n: require('../assets/images/img10n.png'),
-  img13d: require('../assets/images/img13d.png'),
-  img13n: require('../assets/images/img13n.png'),
-  img50d: require('../assets/images/img13d.png'),
-  img50n: require('../assets/images/img13n.png'),
- };
  
 
 const HomeScreen = ({ route, navigation }) => {
@@ -128,12 +108,11 @@ useEffect(() => {
     });
     if (route.params?.valueD) {
       setDistanceUnits(route.params.valueD);
-      calculateResults();
     };
     if (route.params?.valueB) {
       setBearingUnits(route.params.valueB);
-      calculateResults();
     };
+
     if (
       route.params?.p1Lat &&
       route.params?.p1Lon &&
@@ -184,38 +163,34 @@ useEffect(() => {
     return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
   }
 
-  function validate(value) {
+  function validateNonEmpty(value) {
     return !(value) ? 'Required field' : '';
   }
 
-  function validateNum(value) {
+  function validateIsNum(value) {
     return isNaN(value) ? 'Must be a number' : '';
   }
 
   function formValid(vals) {
+    // console.log(vals.prodTitle);
     if (
-      false
-      // (!vals.prodTitle) ||  // isNaN is true if NaN is returned after...
-      // isNaN(vals.prodExpirationDate) ||     // ... being converted to a number
-      // isNaN(vals.prodDateAdded) ||
-      // isNaN(vals.prodDateToBin) ||
-      // isNaN()
+      (!vals.prodTitle) ||  // isNaN is true if NaN is returned after...
+      (!vals.prodExpirationDate) ||     // ... being converted to a number
+      (!vals.prodDateToBin) ||
+      isNaN(vals.prodPrice)
     ) {
       return false;
     } else if (
       vals.prodTitle === '' ||
       vals.prodExpirationDate === '' ||
-      vals.prodDateAdded === '' ||
-      vals.prodDateToBin === ''
+      vals.prodDateToBin === '' ||
+      vals.prodPrice === ''
     ) {
       return false;
     } else {
       return true;
     }
   }
-
-
-
 
 
   // render the item WITH error catching
@@ -240,7 +215,8 @@ useEffect(() => {
         >
           <View>
             <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
-            {/* <Text style={styles.historyTextStyle}> End: {item.state.lat}, {item.state.prodDetails.lon} </Text> */}
+            <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
+            <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
             <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
           </View>
         </TouchableHighlight>
@@ -267,7 +243,7 @@ useEffect(() => {
         value={state.prodTitle.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
-        errorMessage={validate(state.prodTitle)}
+        errorMessage={validateNonEmpty(state.prodTitle)}
         onChangeText={(val) => updateStateObject({ prodTitle: val })}
       />
       <Text> Expiration Date: </Text>
@@ -276,7 +252,7 @@ useEffect(() => {
         value={state.prodExpirationDate.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
-        errorMessage={validate(state.prodExpirationDate)}
+        errorMessage={validateNonEmpty(state.prodExpirationDate)}
         onChangeText={(val) => updateStateObject({ prodExpirationDate: val })}
       />
       <Text> Date to Throw Away: </Text>
@@ -285,7 +261,7 @@ useEffect(() => {
         value={state.prodDateToBin.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
-        errorMessage={validate(state.prodDateToBin)}
+        errorMessage={validateNonEmpty(state.prodDateToBin)}
         onChangeText={(val) => updateStateObject({ prodDateToBin: val })}
       />
       <Text> Price: </Text>
@@ -294,7 +270,7 @@ useEffect(() => {
         value={state.prodPrice} // WIP FIXME .toString()?
         autoCorrect={false}
         errorStyle={styles.input}
-        // errorMessage={validateNum(state.prodDateToBin)}
+        errorMessage={validateIsNum(state.prodPrice)}
         onChangeText={(val) => updateStateObject({ prodPrice: val })}
       />
       <Text> Picture: </Text>
@@ -310,10 +286,10 @@ useEffect(() => {
       <Padder>
         <Button
           style={styles.buttons}
-          title='Calculate'
+          title='Add Item'
           onPress={() => {
             // create timestamp and store the points to persistent Firebase DB memory
-            // if (formValid(state) === true) {
+            if (formValid(state) === true) {
               let timeOfCalc = new Date().toString();
               // let prodDetails = state.prodDetails;
               storeHistoryItem({state, timeOfCalc});
@@ -334,7 +310,7 @@ useEffect(() => {
 
 
 
-            // };
+            };
           }}
         />
       </Padder>
@@ -348,9 +324,9 @@ useEffect(() => {
             setState({
               prodTitle: '',
               prodExpirationDate: '',
-              prodDateAdded: '',
               prodDateToBin: '',
-              prodIsExpired: '',
+              prodDateAdded: '',
+              prodPrice: '',
               prodThumbnail: '',
             });
             
@@ -443,7 +419,7 @@ useEffect(() => {
       </Padder> */}
 
 
-      <Padder>
+      {/* <Padder>
         <View style={{height: '60%'}}>
           <FlatList
             // keyExtracor={(item) => item.text}
@@ -453,7 +429,7 @@ useEffect(() => {
             extraData={historyState}
           />
         </View>
-      </Padder>
+      </Padder> */}
       
       {/* {renderWeather(weatherState1)}
       {renderWeather(weatherState2)} */}
