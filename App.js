@@ -1,7 +1,7 @@
-// Homework 5
+// Final Project
 // CIS 657(01) (Spring/Summer 2024)
 // Zachary Stout
-// Completed: June 11, 2024
+// Completed: ???
 
 import React from 'react';
 import {
