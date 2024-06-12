@@ -78,23 +78,20 @@ const ViewItemScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      // headerRight: () => (
-      //   <TouchableOpacity
-      //     onPress={() => {
-      //       navigation.navigate(
-      //         'Settings',
-      //         {distanceUnits: distanceUnits,
-      //         bearingUnits: bearingUnits},
-      //       );
-      //       console.log('headerRight (Settings) clicked!');
-      //       Keyboard.dismiss();
-      //     }}
-      //   >
-      //     <FontAwesome name="gears" size={24} color="black"/>
-      //   </TouchableOpacity>
-      // ),
-      // // headerTitleAlign: 'center',  // left here for my own note (how to change style individually)
-      // // backgroundColor: '#B9DE8A',
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(
+              'Update Item',
+              item,
+            );
+            console.log('headerRight (Update Item) clicked!');
+            Keyboard.dismiss();
+          }}
+        >
+          <Text style={styles.navTextStyle}> Edit Item </Text>
+        </TouchableOpacity>
+      ),
       headerLeft: () => (
         <TouchableOpacity
           style={styles.navTouchStyle}
@@ -206,20 +203,41 @@ const ViewItemScreen = ({ route, navigation }) => {
     try {
       return(
           <View>
-            {/* <Text> EEAAAAAAEAEAEAEEE </Text> */}
             <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
-            <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
-            <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
             <Text style={styles.timestampStyle}> Added: {item.timeOfAdd} </Text>
+            <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
+            <Text style={styles.historyTextStyle}> Last Day to Use: {item.state.prodDateToBin} </Text>
+            <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
+            <Text style={styles.historyTextStyle}> Picture: {item.state.prodThumbnail} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+
+                    
 
             {/*
             //ATTRIBUTES:
-            prodTitle: '',
-            prodExpirationDate: '',
-            prodDateAdded: '',
-            prodDateToBin: '', // if left empty, autoset as expirationDate?
-            prodIsExpired: false, // default to false? string or boolean?
-            prodThumbnail: '',
+            - prodTitle: '',
+            - prodExpirationDate: '',
+            - prodDateAdded: '',
+            - prodDateToBin: '', // if left empty, autoset as expirationDate?
+            - prodIsExpired: false, // default to false? string or boolean?
+            - prodThumbnail: '',
             prodPrice: '',
             prodBarcode: '',
             */}
@@ -269,183 +287,50 @@ const ViewItemScreen = ({ route, navigation }) => {
             />
         </Padder>
 
-        <Padder>
-            <Button
-                style={styles.buttons}
-                title='Delete Item'
-                onPress={() => {
-                    console.log('-------- FROM VIEW --------');
-                    console.log('deleting item: ', item);
-                    deleteHistoryItem(item);
-                    navigation.navigate(
-                        'Co-Pantry',
-                      //   {historyState}
-                      );
-                    console.log('---------------------------------');
-                }}
-            />
-        </Padder>
 
         <Padder>
-            <View style={{height: '100%'}}>
-                <FlatList
-                    // keyExtracor={(item) => item.text}
-                    data={[item]}
-                    renderItem={renderItem}
-                    // ItemSeparatorComponent={itemSeparatorRender}
-                    extraData={item}
-                />
+            <View style={{
+                height: '70%',
+                backgroundColor: '#D4BAD9',
+                borderWidth: 2,
+                borderColor: 'black'}}>
+              <FlatList style={{flexGrow: 0}} // did anything?
+                  // keyExtracor={(item) => item.text}
+                  data={[item]}
+                  renderItem={renderItem}
+                  // ItemSeparatorComponent={itemSeparatorRender}
+                  extraData={item}
+              />
             </View>
         </Padder>
 
 
-      {/* <Text> Product Name: </Text>
-      <Input
-        placeholder='Enter product name'
-        value={state.prodTitle.toString()}
-        autoCorrect={false}
-        errorStyle={styles.input}
-        errorMessage={validateNonEmpty(state.prodTitle)}
-        onChangeText={(val) => updateStateObject({ prodTitle: val })}
-      />
-      <Text> Expiration Date: </Text>
-      <Input
-        placeholder='Enter expiration date'
-        value={state.prodExpirationDate.toString()}
-        autoCorrect={false}
-        errorStyle={styles.input}
-        errorMessage={validateNonEmpty(state.prodExpirationDate)}
-        onChangeText={(val) => updateStateObject({ prodExpirationDate: val })}
-      />
-      <Text> Date to Throw Away: </Text>
-      <Input
-        placeholder='Enter the date to throw it away'
-        value={state.prodDateToBin.toString()}
-        autoCorrect={false}
-        errorStyle={styles.input}
-        errorMessage={validateNonEmpty(state.prodDateToBin)}
-        onChangeText={(val) => updateStateObject({ prodDateToBin: val })}
-      />
-      <Text> Price: </Text>
-      <Input
-        placeholder='Enter product price'
-        value={state.prodPrice.toString()}
-        autoCorrect={false}
-        errorStyle={styles.input}
-        errorMessage={validateIsNum(state.prodPrice)}
-        onChangeText={(val) => updateStateObject({ prodPrice: val })}
-      />
-      <Text> Picture: </Text>
-      <Input
-        placeholder='Tap to Take a Picture'
-        value={state.prodThumbnail}
-        autoCorrect={false}
-        errorStyle={styles.input}
-        // errorMessage={validateNum(state.lon2)}
-        onChangeText={(val) => updateStateObject({ prodThumbnail: val })}
-      /> */}
 
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='Add Item'
-          onPress={() => {
-            // create timestamp and store the points to persistent Firebase DB memory
-            if (formValid(state) === true) {
-              let timeOfCalc = new Date().toString();
-              storeHistoryItem({state, timeOfCalc});
-              navigation.navigate(
-                'Co-Pantry',
-                // items to send back
-              );
-              Keyboard.dismiss();
-            };
-          }}
-        />
-      </Padder> */}
-
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='Clear'
-          onPress={() => {
-            Keyboard.dismiss();
-            updateStateObject({
-              prodTitle: '',
-              prodExpirationDate: '',
-              prodDateAdded: '',
-              prodDateToBin: '',
-              prodIsExpired: false,
-              prodThumbnail: '',
-              prodPrice: '',
-              prodBarcode: '',
-            });
-            
-            // WIP FIXME----------------------------------
-            // reset params so can click similar history
-            // route.params.p1Lat = '';
-            // route.params.p1Lon = '';
-            // route.params.p2Lat = '';
-            // route.params.p2Lon = '';
-          }}
-        />
-      </Padder> */}
-
-
-
-      {/* 
-      <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log('route.params in ADD (from Settings):', route.params);
-            console.log('actual distanceUnits in ADD:', distanceUnits);
-            console.log('actual bearingUnits in ADD:', bearingUnits);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder>
-      */}
-
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG History params'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log(
-              'history params: ', 
-              {lat1: route.params.p1Lat,
-              lon1: route.params.p1Lon,
-              prodDateAdded: route.params.p2Lat,
-              prodDateToBin: route.params.p2Lon}
-            );
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder> */}
-
-
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG historyState'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log('historyState: ', historyState);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder> */}
-
+        <Padder>
+          <Button
+              style={styles.buttons}
+              title='Delete Item'
+              onPress={() => {
+                  console.log('-------- FROM VIEW --------');
+                  console.log('deleting item: ', item);
+                  deleteHistoryItem(item);
+                  navigation.navigate(
+                      'Co-Pantry',
+                    //   {historyState}
+                    );
+                  console.log('---------------------------------');
+              }}
+          />
+        </Padder>
 
   </Padder>  
   );
 };
 
 const styles = StyleSheet.create({
+  flatListStyle: {
+
+  },
   renderItemStyle: {
     padding: 2,
     // borderBottomWidth: 1,

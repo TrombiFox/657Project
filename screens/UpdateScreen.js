@@ -22,6 +22,9 @@ import { AntDesign } from '@expo/vector-icons';
 
 const UpdateScreen = ({ route, navigation }) => {
   
+  let  item = route.params; // note different than ViewItemScreen
+
+
   const prodDetails = {
     prodTitle: '',
     prodExpirationDate: '',
@@ -94,10 +97,10 @@ useEffect(() => {
           style={styles.navTouchStyle}
           onPress={() => {
             navigation.navigate(
-              'Co-Pantry',
-              {historyState}
+              'View Item',
+              {item},
             );
-            console.log('headerLeft (To Co-Pantry) clicked!');
+            console.log('headerLeft (back to View Item) clicked!');
             Keyboard.dismiss();
           }}
         >
