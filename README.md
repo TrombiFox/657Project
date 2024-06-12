@@ -9,4 +9,5 @@
 ---------------------------------------------------
 ---------------------------------------------------
 
-
+### Notes:
+- removed the getHistoryItem database call from the ViewItemScreen, despite this potentially returning a more up-to-date item. This was to preserve more mobile data.

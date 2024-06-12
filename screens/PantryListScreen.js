@@ -63,16 +63,13 @@ let renderHistory = ({ index, item }) => {
       activeOpacity={0.6}
       underlayColor='#8EC861'  
       onPress={() => {
-          // navigation.navigate(
-          //   'Co-Pantry',
-          //   { // lat and lon info to pass back
-          //     p1Lat: item.prodDetails.lat,
-          //     p1Lon: item.prodDetails.lon,
-          //     p2Lat: item.prodDetails.lat,
-          //     p2Lon: item.prodDetails.lon,
-          //   }
-          // );
-          console.log("Item Pressed: ", item);
+          navigation.navigate(
+            'View Item',
+            {
+              item
+            }
+          );
+          console.log("Item click (to View Item): ", item);
         }}
       >
         <View>

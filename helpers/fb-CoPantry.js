@@ -23,16 +23,21 @@ export function storeHistoryItem(item) {
     push(reference, item);
   }
   
+export function updateHistoryItem(item) {
+  const key = item.id;
+  delete item.id;
+  const db = getDatabase();
+  const reference = ref(db, `historyData/${key}`);
+  set(reference, item);
+}
 
-// (for demo purposes)
-// export function setupDataListener(key) {
-//     console.log('setDataListener called');
-//     const db = getDatabase();
-//     const reference = ref(db, `hw4Data/${key}`);
-//     onValue(reference, (snapshot) => {
-//       console.log('data listener fires up with: ', snapshot);
-//     });
-// }
+export function getHistoryItem(item) {
+  const key = item.id;
+  const db = getDatabase();
+  const reference = ref(db, `historyData/${key}`);
+  return(reference, item);
+}
+
 
 
 export function setupHistoryListener( updateFunc ) {

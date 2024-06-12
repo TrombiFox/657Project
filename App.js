@@ -15,6 +15,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddScreen from './screens/AddScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import PantryListScreen from './screens/PantryListScreen';
+import UpdateScreen from './screens/UpdateScreen';
+import ViewItemScreen from './screens/ViewItemScreen';
 
 
 export default function App() {
@@ -53,6 +55,14 @@ export default function App() {
             <Stack.Screen
               name='Settings'
               component={SettingsScreen}
+            />
+            <Stack.Screen
+              name='Update Item'
+              component={UpdateScreen}
+            />
+            <Stack.Screen
+              name='View Item'
+              component={ViewItemScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>
