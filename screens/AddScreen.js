@@ -294,6 +294,11 @@ useEffect(() => {
             if (formValid(state) === true) {
               let timeOfCalc = new Date().toString();
               storeHistoryItem({state, timeOfCalc});
+              navigation.navigate(
+                'Co-Pantry',
+                // items to send back
+              );
+              Keyboard.dismiss();
             };
           }}
         />
