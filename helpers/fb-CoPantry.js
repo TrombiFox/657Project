@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, onValue, ref, set, push } from 'firebase/database';
+import { getDatabase, onValue, ref, remove, set, push } from 'firebase/database';
 import { firebaseConfig } from './fb-credentials';
 
 
@@ -38,7 +38,12 @@ export function getHistoryItem(item) {
   return(reference, item);
 }
 
-
+export function deleteHistoryItem(item) {
+  const key = item.id;
+  const db = getDatabase();
+  const reference = ref(db, `historyData/${item.id}`);
+  remove(reference);
+}
 
 export function setupHistoryListener( updateFunc ) {
   const db = getDatabase();

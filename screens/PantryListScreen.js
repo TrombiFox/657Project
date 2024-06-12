@@ -76,13 +76,27 @@ let renderHistory = ({ index, item }) => {
           <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
           <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
           <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
-          <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
+          <Text style={styles.timestampStyle}> Added: {item.timeOfAdd} </Text>
         </View>
       </TouchableHighlight>
     );
   } catch (e) {
     return(
-      <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
+      <TouchableHighlight style={styles.renderItemStyle}
+      activeOpacity={0.6}
+      underlayColor='#8EC861'  
+      onPress={() => {
+          navigation.navigate(
+            'View Item',
+            {
+              item
+            }
+          );
+          console.log("Item click (to View Item): ", item);
+        }}
+      >
+        <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
+      </TouchableHighlight>
     );
   }
 };

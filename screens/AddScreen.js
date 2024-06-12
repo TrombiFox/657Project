@@ -292,8 +292,8 @@ useEffect(() => {
           onPress={() => {
             // create timestamp and store the points to persistent Firebase DB memory
             if (formValid(state) === true) {
-              let timeOfCalc = new Date().toString();
-              storeHistoryItem({state, timeOfCalc});
+              let timeOfAdd = new Date().toString();
+              storeHistoryItem({state, timeOfAdd});
               navigation.navigate(
                 'Co-Pantry',
                 // items to send back

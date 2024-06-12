@@ -17,6 +17,7 @@ import {
   storeHistoryItem,
   setupHistoryListener,
   getHistoryItem,
+  deleteHistoryItem,
 } from '../helpers/fb-CoPantry';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -202,30 +203,14 @@ const ViewItemScreen = ({ route, navigation }) => {
 
   // // render the item WITH error catching
   let renderItem = ({ index, item }) => {
-    // try {
+    try {
       return(
-        // <TouchableHighlight style={styles.renderItemStyle}
-        // activeOpacity={0.6}
-        // underlayColor='#8EC861'  
-        // onPress={() => {
-            // navigation.navigate(
-            //   'Co-Pantry',
-            //   { // lat and lon info to pass back
-            //     p1Lat: item.prodDetails.lat,
-            //     p1Lon: item.prodDetails.lon,
-            //     p2Lat: item.prodDetails.lat,
-            //     p2Lon: item.prodDetails.lon,
-            //   }
-            // );
-        //     console.log("Item Pressed: ", item);
-        //   }}
-        // >
           <View>
             {/* <Text> EEAAAAAAEAEAEAEEE </Text> */}
             <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
             <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
             <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
-            <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
+            <Text style={styles.timestampStyle}> Added: {item.timeOfAdd} </Text>
 
             {/*
             //ATTRIBUTES:
@@ -240,13 +225,15 @@ const ViewItemScreen = ({ route, navigation }) => {
             */}
 
           </View>
-        // </TouchableHighlight>
       );
-    // } catch (e) {
-    //   return(
-    //     <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
-    //   );
-    // }
+    } catch (e) {
+      return(
+        <View>
+            <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
+            {/* <Text style={styles.renderItemStyle}> Error Reference: {item.id} </Text> */}
+        </View>
+      );
+    }
   };
 
 
@@ -282,11 +269,25 @@ const ViewItemScreen = ({ route, navigation }) => {
             />
         </Padder>
 
+        <Padder>
+            <Button
+                style={styles.buttons}
+                title='Delete Item'
+                onPress={() => {
+                    console.log('-------- FROM VIEW --------');
+                    console.log('deleting item: ', item);
+                    deleteHistoryItem(item);
+                    navigation.navigate(
+                        'Co-Pantry',
+                      //   {historyState}
+                      );
+                    console.log('---------------------------------');
+                }}
+            />
+        </Padder>
 
         <Padder>
             <View style={{height: '100%'}}>
-                <Text> AAAAAAAAA </Text>
-                <Text> {item.state.prodTitle} </Text>
                 <FlatList
                     // keyExtracor={(item) => item.text}
                     data={[item]}
