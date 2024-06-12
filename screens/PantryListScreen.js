@@ -108,19 +108,39 @@ let itemSeparatorRender= () => {
   )
 }
 
+function renderFlatList() {
+  // console.log('historyState in FlatList: ', historyState);
+  if (historyState.length == 0) {
+    return (
+      <View>
+        <Text style={{alignSelf: 'center', textAlign: 'center', fontSize: 25}}>
+          {'\n'}
+          No Items Here! {'\n'}
+          {'\n'}
+          Use "Add Item" in the top left to add some items!
+        </Text>
+      </View>
+    )
+  } else {
+    return (
+      <View style={{height: '100%'}}>
+        <FlatList
+          // keyExtracor={(item) => item.text}
+          data={historyState}
+          renderItem={renderHistory}
+          ItemSeparatorComponent={itemSeparatorRender}
+          extraData={historyState}
+        />
+      </View>
+    )
+  };
+}
+
 
   return (
     <Padder>
       
-      <View style={{height: '100%'}}>
-          <FlatList
-            // keyExtracor={(item) => item.text}
-            data={historyState}
-            renderItem={renderHistory}
-            ItemSeparatorComponent={itemSeparatorRender}
-            extraData={historyState}
-          />
-        </View>
+      {renderFlatList()}
 
 
 
