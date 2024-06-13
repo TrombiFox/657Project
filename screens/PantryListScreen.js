@@ -144,13 +144,6 @@ function renderFlatList() {
       {renderFlatList()}
 
 
-
-
-
-
-
-
-
       {/* <Padder>
         <Button
           style={styles.buttons}
