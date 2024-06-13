@@ -15,59 +15,44 @@ import Padder from '../components/Padder';
 import {
   inithw4DB,
   storeHistoryItem,
+  updateHistoryItem,
   setupHistoryListener,
 } from '../helpers/fb-CoPantry';
 import { AntDesign } from '@expo/vector-icons';
+import { State } from 'react-native-gesture-handler';
  
 
 const UpdateScreen = ({ route, navigation }) => {
   
-  let  item = route.params; // note different than ViewItemScreen
+  // let  item = route.params;
+  // note different than ViewItemScreen
+  // route.params also gives the ID of the item
+  // route.params.state leaves this out and only gives details
 
 
-  const prodDetails = {
-    prodTitle: '',
-    prodExpirationDate: '',
-    prodDateAdded: '',
-    prodDateToBin: '', // if left empty, autoset as expirationDate?
-    prodIsExpired: false, // default to false? string or boolean?
-    prodThumbnail: '',
-    prodPrice: '',
-    prodBarcode: '',
+  // "state" tracks values on current screen
+    // value changes are only made to "state"
+    // (to be merged with "item" at end)
+  const [state, setState] = useState(route.params.state);
 
-    // lat1: '',     // --> prodTitle
-    // lon1: '',     // --> prodExpirationDate
-    // lat2: '',     // --> prodDateAdded
-    // lon2: '',     // --> prodDateToBin
-    // distance: '', // --> prodIsExpired
-    // bearing: '',  // --> prodThumbnail
-  }
+  // "item" is final updated item to send to database;
+    // "state" will merge with "item" to create final object
+    // only "item" includes the item ID for database
+  const [item, setItem] = useState(route.params);
 
-
-// to save history (list of all current products)
-const [historyState, setHistoryState] = useState([]);
-
-// set up data listener
-useEffect(() => {
-  try {
-    inithw4DB();
-  } catch (err) {
-    console.log(err);
-  }
-  // setupDataListener('score');
-  setupHistoryListener((items) => {
-    // console.log('setting state with: ', items);
-    setHistoryState(items); // can sort with self-defined method like: (items.sort(comparator));
-  });
-}, []);
   
-
-  const [state, setState] = useState(prodDetails);
-
   const updateStateObject = (vals) => {
     // console.log('---- In updateStateObject ', vals);
     setState({
       ...state,
+      ...vals,
+    });
+  };
+
+  const updateItemObject = (vals) => {
+    // console.log('---- In updateItemObject ', vals);
+    setItem({
+      ...item,
       ...vals,
     });
   };
@@ -98,7 +83,7 @@ useEffect(() => {
           onPress={() => {
             navigation.navigate(
               'View Item',
-              {item},
+              route.params,  // ERRPR WO{{{{{{{{{{{{{{}}}}}}}}}}}}}}
             );
             console.log('headerLeft (back to View Item) clicked!');
             Keyboard.dismiss();
@@ -124,39 +109,37 @@ useEffect(() => {
     //   route.params?.p2Lat &&
     //   route.params?.p2Lon
     // ) {
-    //   // set state prodDetails
-    //   console.log('----->>> Update params from HistoryScreen detected. Items passed: \n',
-    //     {
-    //       prodTitle: route.params.p1Lat,
-    //       prodExpirationDate: route.params.p1Lon,
-    //       prodDateAdded: route.params.p2Lat,
-    //       prodDateToBin: route.params.p2Lon,
-    //     }
-    //   );
-    //   // clear any values written by user before using history
-    //   updateStateObject({
-    //     prodTitle: '',
-    //     prodExpirationDate: '',
-    //     prodDateAdded: '',
-    //     prodDateToBin: '',
-    //   });
-    //   // set values based on history params
-    //   updateStateObject({
-    //     prodTitle: route.params.p1Lat,
-    //     prodExpirationDate: route.params.p1Lon,
-    //     prodDateAdded: route.params.p2Lat,
-    //     prodDateToBin: route.params.p2Lon,
-    //   });
+      // set state prodDetails
+      console.log('----->>> Update params from ViewItemScreen detected. Params passed: \n',
+        route.params
+      );
+      // // clear any values written by user before using history
+      // updateStateObject({
+      //   prodTitle: '',
+      //   prodExpirationDate: '',
+      //   prodDateAdded: '',
+      //   prodDateToBin: '', // if left empty, autoset as expirationDate?
+      //   prodIsExpired: false, // default to false? string or boolean?
+      //   prodThumbnail: '',
+      //   prodPrice: '',
+      //   prodBarcode: '',
+      // });
+      // set values based on history params
+      // updateStateObject({
+      //   prodTitle: '',
+      //   prodExpirationDate: '',
+      //   prodDateAdded: '',
+      //   prodDateToBin: '', // if left empty, autoset as expirationDate?
+      //   prodIsExpired: false, // default to false? string or boolean?
+      //   prodThumbnail: '',
+      //   prodPrice: '',
+      //   prodBarcode: '',
+      // });
   
-    // }
+    
   },
   [
-    // route.params?.valueD,
-    // route.params?.valueB,
-    // route.params?.p1Lat,
-    // route.params?.p1Lon,
-    // route.params?.p2Lat,
-    // route.params?.p2Lon,
+    // route?.params,
     // distanceUnits,
     // bearingUnits,
     // historyState, <-- infinite loop no touchy
@@ -242,10 +225,10 @@ useEffect(() => {
   
   return (
     <Padder>
-      <Text> Product Name: </Text>
+      {/* <Text> Product Name: </Text>
       <Input
         placeholder='Enter product name'
-        value={state.prodTitle.toString()}
+        value={item.state.prodTitle.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateNonEmpty(state.prodTitle)}
@@ -254,7 +237,7 @@ useEffect(() => {
       <Text> Expiration Date: </Text>
       <Input
         placeholder='Enter expiration date'
-        value={state.prodExpirationDate.toString()}
+        value={item.state.prodExpirationDate.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateNonEmpty(state.prodExpirationDate)}
@@ -263,12 +246,12 @@ useEffect(() => {
       <Text> Date to Throw Away: </Text>
       <Input
         placeholder='Enter the date to throw it away'
-        value={state.prodDateToBin.toString()}
+        value={item.state.prodDateToBin.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateNonEmpty(state.prodDateToBin)}
         onChangeText={(val) => updateStateObject({ prodDateToBin: val })}
-      />
+      /> */}
       <Text> Price: </Text>
       <Input
         placeholder='Enter product price'
@@ -276,31 +259,45 @@ useEffect(() => {
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateIsNum(state.prodPrice)}
-        onChangeText={(val) => updateStateObject({ prodPrice: val })}
+        onChangeText={(val) => {
+          updateStateObject({prodPrice: val})
+          updateItemObject({state: state});
+        }}
       />
-      <Text> Picture: </Text>
+
+      {/* <Text> Picture: </Text>
       <Input
         placeholder='Tap to Take a Picture'
-        value={state.prodThumbnail}
+        value={state.state.prodThumbnail}
         autoCorrect={false}
         errorStyle={styles.input}
         // errorMessage={validateNum(state.lon2)}
         onChangeText={(val) => updateStateObject({ prodThumbnail: val })}
-      />
+      /> */}
 
       <Padder>
         <Button
           style={styles.buttons}
-          title='Add Item'
+          title='Save'
           onPress={() => {
-            // create timestamp and store the points to persistent Firebase DB memory
+            // make separate copy because somehow ID gets removed...
+            // ...from local "item" upon updateHistoryItem() call.
+            // let item2 = {...item};
             if (formValid(state) === true) {
-              let timeOfAdd = new Date().toString();
-              storeHistoryItem({state, timeOfAdd});
-              navigation.navigate(
-                'Co-Pantry',
-                // items to send back
-              );
+              console.log('UPDATE BUTTON PRESSED');
+              // updateItemObject({state: state});  // cannot be here b/c async?
+              let item2 = {...item};
+              updateHistoryItem(item2);
+              // updateItemObject({item: item2});
+              // navigation.navigate(
+              //   'View Item',
+              //   {item}, // POTENTAL PROBLEEEEEEEEEEEEEM
+              // );
+
+
+
+
+
               Keyboard.dismiss();
             };
           }}
@@ -310,30 +307,40 @@ useEffect(() => {
       <Padder>
         <Button
           style={styles.buttons}
-          title='Clear'
+          title='LOG item'
           onPress={() => {
-            Keyboard.dismiss();
-            updateStateObject({
-              prodTitle: '',
-              prodExpirationDate: '',
-              prodDateAdded: '',
-              prodDateToBin: '',
-              prodIsExpired: false,
-              prodThumbnail: '',
-              prodPrice: '',
-              prodBarcode: '',
-            });
-            
-            // WIP FIXME----------------------------------
-            // reset params so can click similar history
-            // route.params.p1Lat = '';
-            // route.params.p1Lon = '';
-            // route.params.p2Lat = '';
-            // route.params.p2Lon = '';
+            console.log('-------- FROM UPDATE --------');
+            console.log('item from Update: ', item);
+            console.log('---------------------------------');
           }}
         />
       </Padder>
 
+      
+      <Padder>
+        <Button
+          style={styles.buttons}
+          title='LOG state'
+          onPress={() => {
+            console.log('-------- FROM UPDATE --------');
+            console.log('state from Update: ', state);
+            console.log('---------------------------------');
+          }}
+        />
+      </Padder>
+     
+
+      <Padder>
+        <Button
+          style={styles.buttons}
+          title='LOG params'
+          onPress={() => {
+            console.log('-------- FROM UPDATE --------');
+            console.log('params to Update: ', route.params);
+            console.log('---------------------------------');
+          }}
+        />
+      </Padder>
 
 
       {/* 
