@@ -19,7 +19,6 @@ import {
   setupHistoryListener,
 } from '../helpers/fb-CoPantry';
 import { AntDesign } from '@expo/vector-icons';
-import { State } from 'react-native-gesture-handler';
  
 
 const UpdateScreen = ({ route, navigation }) => {

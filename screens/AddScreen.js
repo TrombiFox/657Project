@@ -239,6 +239,7 @@ useEffect(() => {
   
   return (
     <Padder>
+
       <Text> Product Name: </Text>
       <Input
         placeholder='Enter product name'
@@ -248,6 +249,7 @@ useEffect(() => {
         errorMessage={validateNonEmpty(state.prodTitle)}
         onChangeText={(val) => updateStateObject({ prodTitle: val })}
       />
+
       <Text> Expiration Date: </Text>
       <Input
         placeholder='Enter expiration date'
@@ -257,6 +259,7 @@ useEffect(() => {
         errorMessage={validateNonEmpty(state.prodExpirationDate)}
         onChangeText={(val) => updateStateObject({ prodExpirationDate: val })}
       />
+
       <Text> Date to Throw Away: </Text>
       <Input
         placeholder='Enter the date to throw it away'
@@ -266,6 +269,7 @@ useEffect(() => {
         errorMessage={validateNonEmpty(state.prodDateToBin)}
         onChangeText={(val) => updateStateObject({ prodDateToBin: val })}
       />
+
       <Text> Price: </Text>
       <Input
         placeholder='Enter product price'
@@ -275,15 +279,31 @@ useEffect(() => {
         errorMessage={validateIsNum(state.prodPrice)}
         onChangeText={(val) => updateStateObject({ prodPrice: val })}
       />
+
       <Text> Picture: </Text>
-      <Input
+      <Padder>
+        <Button
+          style={styles.buttons}
+          title='Add a Picture'
+          onPress={() => {
+            Keyboard.dismiss();
+            navigation.navigate(
+              'Camera',
+              // items to send back
+            );
+          }}
+        />
+      </Padder>
+
+      {/* <Input
         placeholder='Tap to Take a Picture'
         value={state.prodThumbnail}
         autoCorrect={false}
         errorStyle={styles.input}
         // errorMessage={validateNum(state.lon2)}
         onChangeText={(val) => updateStateObject({ prodThumbnail: val })}
-      />
+      /> */}
+
 
       <Padder>
         <Button

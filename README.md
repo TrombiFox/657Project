@@ -16,4 +16,6 @@
 
 - need to fix FlatList in View Item (visual, low urgency)
 
+- npx expo install expo-camera
+
 - 

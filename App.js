@@ -17,6 +17,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import PantryListScreen from './screens/PantryListScreen';
 import UpdateScreen from './screens/UpdateScreen';
 import ViewItemScreen from './screens/ViewItemScreen';
+import CameraScreen from './screens/CameraScreen';
 
 
 export default function App() {
@@ -63,6 +64,10 @@ export default function App() {
             <Stack.Screen
               name='View Item'
               component={ViewItemScreen}
+            />
+            <Stack.Screen
+              name='Camera'
+              component={CameraScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>
