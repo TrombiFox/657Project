@@ -23,12 +23,12 @@ export function storeHistoryItem(item) {
     push(reference, item);
   }
   
-export function updateHistoryItem(item) {
-  const key = item.id;
-  delete item.id;
+export function updateHistoryItem(itemData, itemKey) {
+  const key = itemKey;
+  // delete item.id;
   const db = getDatabase();
-  const reference = ref(db, `historyData/${key}`);
-  set(reference, item);
+  const reference = ref(db, `historyData/${key}/state`);
+  set(reference, itemData);
 }
 
 export function getHistoryItem(item) {

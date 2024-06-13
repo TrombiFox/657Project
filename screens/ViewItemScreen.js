@@ -24,9 +24,9 @@ import { AntDesign } from '@expo/vector-icons';
 
 const ViewItemScreen = ({ route, navigation }) => {
     
-  let item = route.params.item;
+  // let item = route.params.item;
 
-
+  const [item, setItem] = useState(route.params.item);
 
     // const prodDetails = {
     //     prodTitle: '',
@@ -118,12 +118,9 @@ const ViewItemScreen = ({ route, navigation }) => {
     //   setBearingUnits(route.params.valueB);
     // };
 
-    // if (
-    //   route.params?.p1Lat &&
-    //   route.params?.p1Lon &&
-    //   route.params?.p2Lat &&
-    //   route.params?.p2Lon
-    // ) {
+    if (route?.params) {
+      setItem(route.params.item)
+    }
     //   // set state prodDetails
     //   console.log('----->>> Update params from HistoryScreen detected. Items passed: \n',
     //     {
@@ -151,15 +148,8 @@ const ViewItemScreen = ({ route, navigation }) => {
     // }
   },
   [
-    // route.params?.valueD,
-    // route.params?.valueB,
-    // route.params?.p1Lat,
-    // route.params?.p1Lon,
-    // route.params?.p2Lat,
-    // route.params?.p2Lon,
-    // distanceUnits,
-    // bearingUnits,
-    // historyState, <-- infinite loop no touchy
+    route.params.item,
+    item,
   ]);
 
 

@@ -23,22 +23,19 @@ import { State } from 'react-native-gesture-handler';
  
 
 const UpdateScreen = ({ route, navigation }) => {
-  
-  // let  item = route.params;
-  // note different than ViewItemScreen
-  // route.params also gives the ID of the item
-  // route.params.state leaves this out and only gives details
+  // NOTE:
+    // route.params retains db ID of item
+    // route.params.state retains ONLY data, no ID
 
+  let item = route.params; // preserve original item
+
+  // item key, extracted to avoid deletion in update...
+    // ... and to be explicitly listed
+    const [itemKey, setItemKey] = useState(route.params.id);
 
   // "state" tracks values on current screen
     // value changes are only made to "state"
-    // (to be merged with "item" at end)
   const [state, setState] = useState(route.params.state);
-
-  // "item" is final updated item to send to database;
-    // "state" will merge with "item" to create final object
-    // only "item" includes the item ID for database
-  const [item, setItem] = useState(route.params);
 
   
   const updateStateObject = (vals) => {
@@ -49,13 +46,13 @@ const UpdateScreen = ({ route, navigation }) => {
     });
   };
 
-  const updateItemObject = (vals) => {
-    // console.log('---- In updateItemObject ', vals);
-    setItem({
-      ...item,
-      ...vals,
-    });
-  };
+  // const updateItemObject = (vals) => {
+  //   // console.log('---- In updateItemObject ', vals);
+  //   setItem({
+  //     ...item,
+  //     ...vals,
+  //   });
+  // };
 
 
   useEffect(() => {
@@ -83,9 +80,9 @@ const UpdateScreen = ({ route, navigation }) => {
           onPress={() => {
             navigation.navigate(
               'View Item',
-              route.params,  // ERRPR WO{{{{{{{{{{{{{{}}}}}}}}}}}}}}
+              {item}, // send unchanged original item
             );
-            console.log('headerLeft (back to View Item) clicked!');
+            // console.log('headerLeft (back to View Item) clicked!');
             Keyboard.dismiss();
           }}
         >
@@ -110,6 +107,7 @@ const UpdateScreen = ({ route, navigation }) => {
     //   route.params?.p2Lon
     // ) {
       // set state prodDetails
+      
       console.log('----->>> Update params from ViewItemScreen detected. Params passed: \n',
         route.params
       );
@@ -140,9 +138,6 @@ const UpdateScreen = ({ route, navigation }) => {
   },
   [
     // route?.params,
-    // distanceUnits,
-    // bearingUnits,
-    // historyState, <-- infinite loop no touchy
   ]);
 
 
@@ -255,13 +250,12 @@ const UpdateScreen = ({ route, navigation }) => {
       <Text> Price: </Text>
       <Input
         placeholder='Enter product price'
-        value={state.prodPrice.toString()}
+        value={state.prodPrice}
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateIsNum(state.prodPrice)}
         onChangeText={(val) => {
           updateStateObject({prodPrice: val})
-          updateItemObject({state: state});
         }}
       />
 
@@ -280,23 +274,18 @@ const UpdateScreen = ({ route, navigation }) => {
           style={styles.buttons}
           title='Save'
           onPress={() => {
-            // make separate copy because somehow ID gets removed...
-            // ...from local "item" upon updateHistoryItem() call.
-            // let item2 = {...item};
             if (formValid(state) === true) {
               console.log('UPDATE BUTTON PRESSED');
-              // updateItemObject({state: state});  // cannot be here b/c async?
-              let item2 = {...item};
-              updateHistoryItem(item2);
-              // updateItemObject({item: item2});
-              // navigation.navigate(
-              //   'View Item',
-              //   {item}, // POTENTAL PROBLEEEEEEEEEEEEEM
-              // );
-
-
-
-
+              // let item2 = {...item};
+              updateHistoryItem(state, itemKey);
+              navigation.navigate(
+                'View Item',
+                // reconstruct an item to send back (avoid extra DB call)
+                // formatted to match incoming item from route.params
+                {item: 
+                  {id: itemKey, state: {...state}, timeOfAdd: route.params.timeOfAdd}
+                },
+              );
 
               Keyboard.dismiss();
             };
@@ -311,6 +300,18 @@ const UpdateScreen = ({ route, navigation }) => {
           onPress={() => {
             console.log('-------- FROM UPDATE --------');
             console.log('item from Update: ', item);
+            console.log('---------------------------------');
+          }}
+        />
+      </Padder>
+
+      <Padder>
+        <Button
+          style={styles.buttons}
+          title='LOG item2'
+          onPress={() => {
+            console.log('-------- FROM UPDATE --------');
+            console.log('item2 from Update: ', item2);
             console.log('---------------------------------');
           }}
         />
