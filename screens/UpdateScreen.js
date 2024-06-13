@@ -91,54 +91,15 @@ const UpdateScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       )
     });
-
-    ////////// bearing and distance left to avoid error temporarily
-    // if (route.params?.valueD) {
-    //   setDistanceUnits(route.params.valueD);
-    // };
-    // if (route.params?.valueB) {
-    //   setBearingUnits(route.params.valueB);
-    // };
-
-    // if (
-    //   route.params?.p1Lat &&
-    //   route.params?.p1Lon &&
-    //   route.params?.p2Lat &&
-    //   route.params?.p2Lon
-    // ) {
-      // set state prodDetails
       
       console.log('----->>> Update params from ViewItemScreen detected. Params passed: \n',
         route.params
       );
-      // // clear any values written by user before using history
-      // updateStateObject({
-      //   prodTitle: '',
-      //   prodExpirationDate: '',
-      //   prodDateAdded: '',
-      //   prodDateToBin: '', // if left empty, autoset as expirationDate?
-      //   prodIsExpired: false, // default to false? string or boolean?
-      //   prodThumbnail: '',
-      //   prodPrice: '',
-      //   prodBarcode: '',
-      // });
-      // set values based on history params
-      // updateStateObject({
-      //   prodTitle: '',
-      //   prodExpirationDate: '',
-      //   prodDateAdded: '',
-      //   prodDateToBin: '', // if left empty, autoset as expirationDate?
-      //   prodIsExpired: false, // default to false? string or boolean?
-      //   prodThumbnail: '',
-      //   prodPrice: '',
-      //   prodBarcode: '',
-      // });
   
     
   },
-  [
-    // route?.params,
-  ]);
+  []
+  );
 
 
 
@@ -259,15 +220,17 @@ const UpdateScreen = ({ route, navigation }) => {
         }}
       />
 
-      {/* <Text> Picture: </Text>
+      <Text> Picture: </Text>
       <Input
         placeholder='Tap to Take a Picture'
-        value={state.state.prodThumbnail}
+        value={state.prodThumbnail}
         autoCorrect={false}
         errorStyle={styles.input}
         // errorMessage={validateNum(state.lon2)}
-        onChangeText={(val) => updateStateObject({ prodThumbnail: val })}
-      /> */}
+        onChangeText={(val) => {
+          updateStateObject({ prodThumbnail: val })
+        }}
+      />
 
       <Padder>
         <Button
@@ -293,7 +256,7 @@ const UpdateScreen = ({ route, navigation }) => {
         />
       </Padder>
 
-      <Padder>
+      {/* <Padder>
         <Button
           style={styles.buttons}
           title='LOG item'
@@ -341,7 +304,7 @@ const UpdateScreen = ({ route, navigation }) => {
             console.log('---------------------------------');
           }}
         />
-      </Padder>
+      </Padder> */}
 
 
       {/* 

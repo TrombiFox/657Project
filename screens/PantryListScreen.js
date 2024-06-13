@@ -76,6 +76,7 @@ let renderHistory = ({ index, item }) => {
           <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
           <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
           <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
+          <Text style={styles.historyTextStyle}> Picture: {item.state.prodThumbnail} </Text>
           <Text style={styles.timestampStyle}> Added: {item.timeOfAdd} </Text>
         </View>
       </TouchableHighlight>
