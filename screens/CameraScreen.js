@@ -77,7 +77,7 @@ const CameraScreen = ({ route, navigation }) => {
       quality: 1,
       base64: true,
       exif: false,
-      
+      mode: 'picture',
     };
     
     let newPhoto = await cameraRef.current.takePictureAsync(options);
@@ -101,7 +101,24 @@ const CameraScreen = ({ route, navigation }) => {
       
       <View style={styles.previewContainer}>
         <Image style={styles.imagePreview} source={{ uri: `data:image/jpg;base64,${photo.base64}`}} />
-        {hasMediaLibraryPermission ? <Button title="Save" onPress={savePhoto} /> : undefined}
+        {hasMediaLibraryPermission ? 
+          <Button
+            title="Save"
+            onPress={() => {
+              navigation.navigate(
+                'Add Item',
+                {
+                  photo,
+                  uriKeyBase: 'data:image/jpg;base64,',
+                  // note: 'note that full uri will be `uriKey${photo.base64}`
+                }
+              );
+              console.log('photo saved!');
+              savePhoto
+            }}
+          /> 
+          : undefined
+        }
         <Button title="Discard" onPress={() => setPhoto(undefined)} />
       </View>
       

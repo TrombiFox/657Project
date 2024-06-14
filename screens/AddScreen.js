@@ -107,48 +107,13 @@ useEffect(() => {
       )
     });
 
-    ////////// bearing and distance left to avoid error temporarily
-    // if (route.params?.valueD) {
-    //   setDistanceUnits(route.params.valueD);
-    // };
-    // if (route.params?.valueB) {
-    //   setBearingUnits(route.params.valueB);
-    // };
+    if (route.params?.photo) {
+      updateStateObject({prodThumbnail: (route.params)})
+    }
 
-    // if (
-    //   route.params?.p1Lat &&
-    //   route.params?.p1Lon &&
-    //   route.params?.p2Lat &&
-    //   route.params?.p2Lon
-    // ) {
-    //   // set state prodDetails
-    //   console.log('----->>> Update params from HistoryScreen detected. Items passed: \n',
-    //     {
-    //       prodTitle: route.params.p1Lat,
-    //       prodExpirationDate: route.params.p1Lon,
-    //       prodDateAdded: route.params.p2Lat,
-    //       prodDateToBin: route.params.p2Lon,
-    //     }
-    //   );
-    //   // clear any values written by user before using history
-    //   updateStateObject({
-    //     prodTitle: '',
-    //     prodExpirationDate: '',
-    //     prodDateAdded: '',
-    //     prodDateToBin: '',
-    //   });
-    //   // set values based on history params
-    //   updateStateObject({
-    //     prodTitle: route.params.p1Lat,
-    //     prodExpirationDate: route.params.p1Lon,
-    //     prodDateAdded: route.params.p2Lat,
-    //     prodDateToBin: route.params.p2Lon,
-    //   });
-  
-    // }
   },
   [
-    // route.params?.valueD,
+    route.params?.photo,
     // route.params?.valueB,
     // route.params?.p1Lat,
     // route.params?.p1Lon,
@@ -195,40 +160,30 @@ useEffect(() => {
   }
 
 
-  // // render the item WITH error catching
-  // let renderHistory = ({ index, item }) => {
-  //   try {
-  //     return(
-  //       <TouchableHighlight style={styles.renderItemStyle}
-  //       activeOpacity={0.6}
-  //       underlayColor='#8EC861'  
-  //       onPress={() => {
-  //           // navigation.navigate(
-  //           //   'Co-Pantry',
-  //           //   { // lat and lon info to pass back
-  //           //     p1Lat: item.prodDetails.lat,
-  //           //     p1Lon: item.prodDetails.lon,
-  //           //     p2Lat: item.prodDetails.lat,
-  //           //     p2Lon: item.prodDetails.lon,
-  //           //   }
-  //           // );
-  //           console.log("Item Pressed: ", item);
-  //         }}
-  //       >
-  //         <View>
-  //           <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
-  //           <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
-  //           <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
-  //           <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
-  //         </View>
-  //       </TouchableHighlight>
-  //     );
-  //   } catch (e) {
-  //     return(
-  //       <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
-  //     );
-  //   }
-  // };
+
+  let tryRenderImage = (image) => {
+    try {
+      return (
+        <View style={styles.imagePreviewContainer}>
+          <Image
+            style={styles.imagePreview}
+            resizeMode='contain'
+            source={{uri:
+              `${image.uriKeyBase},
+              ${image.photo.base64}`
+            }}
+
+          />
+        </View>
+      )
+    } catch (e) {
+      return (
+        <Text style={styles.noImageStyle}>
+          (No Picture Provided)
+        </Text>
+      )
+    }
+  }
 
 
   // let itemSeparatorRender= () => {
@@ -280,7 +235,57 @@ useEffect(() => {
         onChangeText={(val) => updateStateObject({ prodPrice: val })}
       />
 
+
+
+
+
+
+
+
+
+
+
+
+
+
       <Text> Picture: </Text>
+
+      {tryRenderImage(state.prodThumbnail)}
+
+      {/* <Input
+        // placeholder='Enter product price'
+        value={state.prodThumbnail.toString()}
+        editable={false}
+        // autoCorrect={false}
+        // errorStyle={styles.input}
+        // errorMessage={validateIsNum(state.prodPrice)}
+        // onChangeText={(val) => updateStateObject({ prodPrice: val })}
+      /> */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <Padder>
         <Button
           style={styles.buttons}
@@ -289,8 +294,10 @@ useEffect(() => {
             Keyboard.dismiss();
             navigation.navigate(
               'Camera',
+              state
               // items to send back
             );
+            console.log('sending params to Camera: ', state);
           }}
         />
       </Padder>
@@ -324,7 +331,7 @@ useEffect(() => {
         />
       </Padder>
 
-      <Padder>
+      {/* <Padder>
         <Button
           style={styles.buttons}
           title='Clear'
@@ -340,17 +347,30 @@ useEffect(() => {
               prodPrice: '',
               prodBarcode: '',
             });
-            
-            // WIP FIXME----------------------------------
-            // reset params so can click similar history
-            // route.params.p1Lat = '';
-            // route.params.p1Lon = '';
-            // route.params.p2Lat = '';
-            // route.params.p2Lon = '';
           }}
         />
-      </Padder>
+      </Padder> */}
 
+
+      {/* <Padder>
+        <Button
+          style={styles.buttons}
+          title='log params from Camera'
+          onPress={() => {
+            console.log(route.params)
+          }}
+        />
+      </Padder> */}
+      
+      {/* <Padder>
+        <Button
+          style={styles.buttons}
+          title='log state.prodThumbnail'
+          onPress={() => {
+            console.log(state.prodThumbnail)
+          }}
+        />
+      </Padder> */}
 
 
       {/* 
@@ -517,6 +537,33 @@ const styles = StyleSheet.create({
   },
   navTextStyle: {
     fontSize: 15,
+  },
+  imagePreviewContainer: {
+    // alignContent: 'center',
+    // justifyContent: 'center',
+    maxHeight: 10,
+    // borderColor: 'red',
+    // borderWidth: 2,
+  },
+  imagePreview: {
+    alignSelf: 'stretch',
+    // // justifyContent: 'center',
+    // // alignItems: 'center',
+    // // flex: 1,
+    height: '100%',
+    // maxHeight: 20,
+    width: '100%',
+    // borderWidth: 2,
+  },
+   noImageStyle: {
+    height: 100,
+    width: '95%',
+    fontSize: 15,
+    alignSelf: 'center',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    borderWidth: 2,
   },
 });
 

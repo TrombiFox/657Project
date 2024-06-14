@@ -8,26 +8,26 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 const SettingsScreen = ({ route, navigation }) => {
 
-  const [openD, setOpenD] = useState(false);
-  const [valueD, setValueD] = useState(route.params.distanceUnits);
-  const [itemsD, setItemsD] = useState([
-    {label: 'Miles', value: 'miles'},
-    {label: 'Kilometers', value: 'kilometers'}
+  const [openA, setOpenA] = useState(false);
+  const [valueA, setValueA] = useState();
+  const [itemsA, setItemsA] = useState([
+    {label: 'Option 1', value: 'Option1'},
+    {label: 'Option 2', value: 'Option2'}
   ]);
 
   const [openB, setOpenB] = useState(false);
-  const [valueB, setValueB] = useState(route.params.bearingUnits);
+  const [valueB, setValueB] = useState();
   const [itemsB, setItemsB] = useState([
-    {label: 'Mils', value: 'mils'},
-    {label: 'Degrees', value: 'degrees'}
+    {label: 'Option 3', value: 'Option3'},
+    {label: 'Option 4', value: 'Option4'}
   ]);
 
-  const onOpenD = useCallback(() => {
+  const onOpenA = useCallback(() => {
     setOpenB(false);
   }, []);
 
   const onOpenB = useCallback(() => {
-    setOpenD(false);
+    setopenA(false);
   }, []);
 
 
@@ -39,12 +39,12 @@ const SettingsScreen = ({ route, navigation }) => {
           onPress={() => {
             // console.log('currentUnitTypes.distanceUnits after Save pressed:', currentUnitTypes.distanceUnits);
             // console.log('currentUnitTypes.bearingUnits after Save pressed:', currentUnitTypes.bearingUnits);
-            console.log('valueD after Save clicked:', valueD);
+            console.log('valueA after Save clicked:', valueA);
             console.log('valueB after Save clicked:', valueB);
             navigation.navigate(
               'Co-Pantry',
               {
-                valueD,
+                valueA,
                 valueB,
               }
             );
@@ -67,39 +67,39 @@ const SettingsScreen = ({ route, navigation }) => {
       headerTitleAlign: 'center',
     })
   },
-  [valueD, valueB]);
+  [valueA, valueB]);
 
 
   return (
     <View style={styles.screen}>
       <Padder>
-        <Text> Distance Units </Text>
+        <Text> Options 1 and 2 </Text>
         <DropDownPicker
-          open={openD}
-          onOpen={onOpenD}
+          open={openA}
+          onOpen={onOpenA}
           // // playing with options:
           // theme="DARK"
           // mode="SIMPLE"
           // dropDownDirection="AUTO"
           // bottomOffset={100}
           listMode="SCROLLVIEW" // could set to MODAL as a temp fix
-          value={valueD}
-          items={itemsD}
-          setOpen={setOpenD}
-          setValue={setValueD}
-          setItems={setItemsD}
+          value={valueA}
+          items={itemsA}
+          setOpen={setOpenA}
+          setValue={setValueA}
+          setItems={setItemsA}
           zIndex={3000} //set 
           onChangeValue={(value) => {
-            console.log('Distance dropdown value changed to:', value);
+            console.log('1 and 2 dropdown value changed to:', value);
           }}
           // // more playing with another option:
           // disabled={true}
           // disabledStyle={{opacity: 0.1}}
-          placeholder="insert code for selecting here?"
+          placeholder="Select an Option"
         />
       </Padder>
       <Padder>
-        <Text> Bearing Units </Text>
+        <Text> Options 3 and 4 </Text>
         <DropDownPicker
           open={openB}
           onOpen={onOpenB}
@@ -110,8 +110,9 @@ const SettingsScreen = ({ route, navigation }) => {
           setItems={setItemsB}
           zIndex={2000}
           onChangeValue={(value) => {
-            console.log('Bearing dropdown value changed to:', value)
+            console.log('3 and 4 dropdown value changed to:', value)
           }}
+          placeholder="Select an Option"
         />
       </Padder>
 
@@ -127,7 +128,7 @@ const SettingsScreen = ({ route, navigation }) => {
             console.log('-------- FROM SETTINGS --------');
             console.log('route.params in Settings (from HOME):', route.params);
             // console.log('currentUnitTypes: ', currentUnitTypes);
-            console.log('valueD from Settings:', valueD);
+            console.log('valueA from Settings:', valueA);
             console.log('valueB from Settings:', valueB);
             console.log('-------------------------------');
           }}

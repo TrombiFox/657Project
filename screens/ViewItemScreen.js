@@ -188,18 +188,44 @@ const ViewItemScreen = ({ route, navigation }) => {
 //   }
 
 
+
+  let tryRenderImage = (image) => {
+    try {
+      return (
+        <View style={styles.imagePreviewContainer}>
+          <Image
+            style={styles.imagePreview}
+            resizeMode='contain'
+            source={{uri:
+              `${image.uriKeyBase},
+              ${image.photo.base64}`
+            }}
+
+          />
+        </View>
+      )
+    } catch (e) {
+      return (
+        <Text style={styles.noImageStyle}>
+          (No Picture Provided)
+        </Text>
+      )
+    }
+  }
+
+
   // // render the item WITH error catching
   let renderItem = ({ index, item }) => {
     try {
       return(
           <View>
-            <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
-            <Text style={styles.timestampStyle}> Added: {item.timeOfAdd} </Text>
-            <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
-            <Text style={styles.historyTextStyle}> Last Day to Use: {item.state.prodDateToBin} </Text>
-            <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
-            <Text style={styles.historyTextStyle}> Picture: {item.state.prodThumbnail} </Text>
-            <Text style={styles.historyTextStyle}> Price: {item.state.prodPrice} </Text>
+            <Text style={styles.historyTextStyle}> - Product: {item.state.prodTitle} </Text>
+            <Text style={styles.historyTextStyle}> - Added: {item.timeOfAdd} </Text>
+            <Text style={styles.historyTextStyle}> - Expiration Date: {item.state.prodExpirationDate} </Text>
+            <Text style={styles.historyTextStyle}> - Last Day to Use: {item.state.prodDateToBin} </Text>
+            <Text style={styles.historyTextStyle}> - Expired? {item.state.prodIsExpired.toString()} </Text>
+            <Text style={styles.historyTextStyle}> - Price: {item.state.prodPrice} </Text>
+            {tryRenderImage(item.state.prodThumbnail)}
 
                     
 
@@ -221,7 +247,6 @@ const ViewItemScreen = ({ route, navigation }) => {
       return(
         <View>
             <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
-            {/* <Text style={styles.renderItemStyle}> Error Reference: {item.id} </Text> */}
         </View>
       );
     }
@@ -236,7 +261,7 @@ const ViewItemScreen = ({ route, navigation }) => {
   
   return (
     <Padder>
-        <Padder>
+        {/* <Padder>
             <Button
                 style={styles.buttons}
                 title='LOG item'
@@ -246,9 +271,9 @@ const ViewItemScreen = ({ route, navigation }) => {
                     console.log('---------------------------------');
                 }}
             />
-        </Padder>
+        </Padder> */}
 
-        <Padder>
+        {/* <Padder>
             <Button
                 style={styles.buttons}
                 title='LOG route.params.item'
@@ -258,12 +283,12 @@ const ViewItemScreen = ({ route, navigation }) => {
                     console.log('---------------------------------');
                 }}
             />
-        </Padder>
+        </Padder> */}
 
 
         <Padder>
             <View style={{
-                height: '70%',
+                height: '90%',
                 backgroundColor: '#D4BAD9',
                 borderWidth: 2,
                 borderColor: 'black'}}>
@@ -371,6 +396,33 @@ const styles = StyleSheet.create({
   },
   navTextStyle: {
     fontSize: 15,
+  },
+  imagePreviewContainer: {
+    // alignContent: 'center',
+    // justifyContent: 'center',
+    maxHeight: 500,
+    // borderColor: 'red',
+    // borderWidth: 2,
+  },
+  imagePreview: {
+    alignSelf: 'stretch',
+    // // justifyContent: 'center',
+    // // alignItems: 'center',
+    // // flex: 1,
+    height: '100%',
+    // maxHeight: 20,
+    width: '100%',
+    // borderWidth: 2,
+  },
+  noImageStyle: {
+    height: 100,
+    width: '95%',
+    fontSize: 15,
+    alignSelf: 'center',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    borderWidth: 2,
   },
 });
 

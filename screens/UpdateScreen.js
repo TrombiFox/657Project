@@ -136,40 +136,33 @@ const UpdateScreen = ({ route, navigation }) => {
   }
 
 
-  // // render the item WITH error catching
-  // let renderHistory = ({ index, item }) => {
-  //   try {
-  //     return(
-  //       <TouchableHighlight style={styles.renderItemStyle}
-  //       activeOpacity={0.6}
-  //       underlayColor='#8EC861'  
-  //       onPress={() => {
-  //           // navigation.navigate(
-  //           //   'Co-Pantry',
-  //           //   { // lat and lon info to pass back
-  //           //     p1Lat: item.prodDetails.lat,
-  //           //     p1Lon: item.prodDetails.lon,
-  //           //     p2Lat: item.prodDetails.lat,
-  //           //     p2Lon: item.prodDetails.lon,
-  //           //   }
-  //           // );
-  //           console.log("Item Pressed: ", item);
-  //         }}
-  //       >
-  //         <View>
-  //           <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
-  //           <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
-  //           <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
-  //           <Text style={styles.timestampStyle}> Added: {item.timeOfCalc} </Text>
-  //         </View>
-  //       </TouchableHighlight>
-  //     );
-  //   } catch (e) {
-  //     return(
-  //       <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
-  //     );
-  //   }
-  // };
+
+
+  let tryRenderImage = (image) => {
+    try {
+      return (
+        <View style={styles.imagePreviewContainer}>
+          <Image
+            style={styles.imagePreview}
+            resizeMode='contain'
+            source={{uri:
+              `${image.uriKeyBase},
+              ${image.photo.base64}`
+            }}
+
+          />
+        </View>
+      )
+    } catch (e) {
+      return (
+        <Text style={styles.noImageStyle}>
+          (No Picture Provided)
+        </Text>
+      )
+    }
+  }
+
+
 
 
   // let itemSeparatorRender= () => {
@@ -220,16 +213,9 @@ const UpdateScreen = ({ route, navigation }) => {
       />
 
       <Text> Picture: </Text>
-      <Input
-        placeholder='Tap to Take a Picture'
-        value={state.prodThumbnail}
-        autoCorrect={false}
-        errorStyle={styles.input}
-        // errorMessage={validateNum(state.lon2)}
-        onChangeText={(val) => {
-          updateStateObject({ prodThumbnail: val })
-        }}
-      />
+      {tryRenderImage(item.state.prodThumbnail)}
+
+
 
       <Padder>
         <Button
@@ -470,6 +456,33 @@ const styles = StyleSheet.create({
   },
   navTextStyle: {
     fontSize: 15,
+  },
+  imagePreviewContainer: {
+    // alignContent: 'center',
+    // justifyContent: 'center',
+    maxHeight: 150,
+    // borderColor: 'red',
+    // borderWidth: 2,
+  },
+  imagePreview: {
+    alignSelf: 'stretch',
+    // // justifyContent: 'center',
+    // // alignItems: 'center',
+    // // flex: 1,
+    height: '100%',
+    // maxHeight: 20,
+    width: '100%',
+    // borderWidth: 2,
+  },
+  noImageStyle: {
+    height: 100,
+    width: '95%',
+    fontSize: 15,
+    alignSelf: 'center',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    borderWidth: 2,
   },
 });
 

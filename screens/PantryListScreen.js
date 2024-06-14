@@ -3,6 +3,7 @@ import { FlatList, Keyboard, StyleSheet, Text, TouchableHighlight, TouchableOpac
 import Padder from '../components/Padder';
 import { setupHistoryListener } from '../helpers/fb-CoPantry';
 import { FontAwesome } from '@expo/vector-icons';
+import { Image } from '@rneui/themed';
 
 
 const PantryListScreen = ({ route, navigation }) => {
@@ -55,87 +56,114 @@ const [bearingUnits, setBearingUnits] = useState('degrees');
     });
   }, []);
   
-// render the item WITH error catching
-let renderHistory = ({ index, item }) => {
-  try {
-    return(
-      <TouchableHighlight style={styles.renderItemStyle}
-      activeOpacity={0.6}
-      underlayColor='#8EC861'  
-      onPress={() => {
-          navigation.navigate(
-            'View Item',
-            {
-              item
-            }
-          );
-          console.log("Item click (to View Item): ", item);
-        }}
-      >
-        <View>
-          <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle} </Text>
-          <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate} </Text>
-          <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
-          <Text style={styles.historyTextStyle}> Picture: {item.state.prodThumbnail} </Text>
-          <Text style={styles.timestampStyle}> Added: {item.timeOfAdd} </Text>
+  let tryRenderImage = (image) => {
+    try {
+      return (
+        <View style={styles.imagePreviewContainer}>
+          <Image
+            style={styles.imagePreview}
+            resizeMode='contain'
+            source={{uri:
+              `${image.uriKeyBase},
+              ${image.photo.base64}`
+            }}
+
+          />
         </View>
-      </TouchableHighlight>
-    );
-  } catch (e) {
-    return(
-      <TouchableHighlight style={styles.renderItemStyle}
-      activeOpacity={0.6}
-      underlayColor='#8EC861'  
-      onPress={() => {
-          navigation.navigate(
-            'View Item',
-            {
-              item
-            }
-          );
-          console.log("Item click (to View Item): ", item);
-        }}
-      >
-        <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
-      </TouchableHighlight>
-    );
-  }
-};
-
-
-let itemSeparatorRender= () => {
-  return(
-    <Text style={{backgroundColor: 'black', height: 1}}> </Text>
-  )
-}
-
-function renderFlatList() {
-  // console.log('historyState in FlatList: ', historyState);
-  if (historyState.length == 0) {
-    return (
-      <View>
-        <Text style={{alignSelf: 'center', textAlign: 'center', fontSize: 25}}>
-          {'\n'}
-          No Items Here! {'\n'}
-          {'\n'}
-          Use "Add Item" in the top left to add some items!
+      )
+    } catch (e) {
+      return (
+        <Text style={styles.noImageStyle}>
+          (No Picture Provided)
         </Text>
-      </View>
-    )
-  } else {
-    return (
-      <View style={{height: '100%'}}>
-        <FlatList
-          // keyExtracor={(item) => item.text}
-          data={historyState}
-          renderItem={renderHistory}
-          ItemSeparatorComponent={itemSeparatorRender}
-          extraData={historyState}
-        />
-      </View>
-    )
+      )
+    }
+  }
+
+
+
+  // render the item WITH error catching
+  let renderHistory = ({ index, item }) => {
+    try {
+      return(
+        <TouchableHighlight style={styles.renderItemStyle}
+        activeOpacity={0.6}
+        underlayColor='#8EC861'  
+        onPress={() => {
+            navigation.navigate(
+              'View Item',
+              {
+                item
+              }
+            );
+            // console.log("Item click (to View Item): ", item);
+          }}
+        >
+          <View>
+            <Text style={styles.historyTextStyle}> Product: {item.state.prodTitle.toString()} </Text>
+            <Text style={styles.historyTextStyle}> Expiration Date: {item.state.prodExpirationDate.toString()} </Text>
+            <Text style={styles.historyTextStyle}> Expired? {item.state.prodIsExpired.toString()} </Text>
+            {tryRenderImage(item.state.prodThumbnail)}
+            <Text style={styles.timestampStyle}> Added: {item.timeOfAdd} </Text>
+          </View>
+        </TouchableHighlight>
+      );
+    } catch (e) {
+      return(
+        <TouchableHighlight style={styles.renderItemStyle}
+        activeOpacity={0.6}
+        underlayColor='#8EC861'  
+        onPress={() => {
+            navigation.navigate(
+              'View Item',
+              {
+                item
+              }
+            );
+            console.log("Item click (to View Item): ", item);
+          }}
+        >
+          <Text style={styles.renderItemStyle}> (ERROR: Potential Invalid Data Entry) </Text>
+        </TouchableHighlight>
+      );
+    }
   };
-}
+
+
+
+  let itemSeparatorRender= () => {
+    return(
+      <Text style={{backgroundColor: 'black', height: 1}}> </Text>
+    )
+  }
+
+  function renderFlatList() {
+    // console.log('historyState in FlatList: ', historyState);
+    if (historyState.length == 0) {
+      return (
+        <View>
+          <Text style={{alignSelf: 'center', textAlign: 'center', fontSize: 25}}>
+            {'\n'}
+            No Items Here! {'\n'}
+            {'\n'}
+            Use "Add Item" in the top left to add some items!
+          </Text>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{height: '100%'}}>
+          <FlatList
+            // keyExtracor={(item) => item.text}
+            data={historyState}
+            renderItem={renderHistory}
+            ItemSeparatorComponent={itemSeparatorRender}
+            extraData={historyState}
+          />
+        </View>
+      )
+    };
+  }
 
 
   return (
@@ -195,7 +223,38 @@ const styles = StyleSheet.create({
       alignSelf: 'flex-end',
       fontSize: 12,
       fontStyle: 'italic',
-    }
+    },
+    imagePreviewContainer: {
+      // alignContent: 'center',
+      // justifyContent: 'center',
+      // justifyItems: 'center',
+      // alignItems: 'center',
+      maxHeight: 100,
+      width: '100%',
+      // borderColor: 'red',
+      // borderWidth: 2,
+    },
+    imagePreview: {
+      // alignSelf: 'stretch',
+      // justifySelf: 'center',
+      // alignSelf: 'center',
+      // alignItems: 'center',
+      // justifyItems: 'center',
+      // flex: 1,
+      height: '100%',
+      width: '100%',
+      // borderWidth: 2,
+    },
+    noImageStyle: {
+      height: 100,
+      width: '50%',
+      fontSize: 15,
+      alignSelf: 'center',
+      fontStyle: 'italic',
+      textAlign: 'center',
+      textAlignVertical: 'center',
+      borderWidth: 2,
+    },
   });
   
   export default PantryListScreen;
