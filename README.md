@@ -18,7 +18,7 @@
 
 - npx expo install expo-camera
 
-### Reference:
+### --- Reference: ---
 #### // Expo Camera
 - initial code taken from documentation:
 - https://docs.expo.dev/versions/latest/sdk/camera/#types
