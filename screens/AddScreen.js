@@ -1,13 +1,10 @@
 import { Button, Input, Image } from '@rneui/themed';
 import { 
-  FlatList,
   Keyboard,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
-  ActivityIndicator,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
@@ -25,40 +22,14 @@ const AddScreen = ({ route, navigation }) => {
   const prodDetails = {
     prodTitle: '',
     prodExpirationDate: '',
-    prodDateAdded: '',
     prodDateToBin: '', // if left empty, autoset as expirationDate?
-    prodIsExpired: false, // default to false? string or boolean?
+    prodIsExpired: false,
     prodThumbnail: '',
     prodPrice: '',
     prodBarcode: '',
-
-    // lat1: '',     // --> prodTitle
-    // lon1: '',     // --> prodExpirationDate
-    // lat2: '',     // --> prodDateAdded
-    // lon2: '',     // --> prodDateToBin
-    // distance: '', // --> prodIsExpired
-    // bearing: '',  // --> prodThumbnail
   }
 
-
-// to save history (list of all current products)
-const [historyState, setHistoryState] = useState([]);
-
-// set up data listener
-useEffect(() => {
-  try {
-    inithw4DB();
-  } catch (err) {
-    console.log(err);
-  }
-  // setupDataListener('score');
-  setupHistoryListener((items) => {
-    // console.log('setting state with: ', items);
-    setHistoryState(items); // can sort with self-defined method like: (items.sort(comparator));
-  });
-}, []);
   
-
   const [state, setState] = useState(prodDetails);
 
   const updateStateObject = (vals) => {
@@ -72,23 +43,6 @@ useEffect(() => {
 
   useEffect(() => {
     navigation.setOptions({
-      // headerRight: () => (
-      //   <TouchableOpacity
-      //     onPress={() => {
-      //       navigation.navigate(
-      //         'Settings',
-      //         {distanceUnits: distanceUnits,
-      //         bearingUnits: bearingUnits},
-      //       );
-      //       console.log('headerRight (Settings) clicked!');
-      //       Keyboard.dismiss();
-      //     }}
-      //   >
-      //     <FontAwesome name="gears" size={24} color="black"/>
-      //   </TouchableOpacity>
-      // ),
-      // // headerTitleAlign: 'center',  // left here for my own note (how to change style individually)
-      // // backgroundColor: '#B9DE8A',
       headerLeft: () => (
         <TouchableOpacity
           style={styles.navTouchStyle}
@@ -114,14 +68,6 @@ useEffect(() => {
   },
   [
     route.params?.photo,
-    // route.params?.valueB,
-    // route.params?.p1Lat,
-    // route.params?.p1Lon,
-    // route.params?.p2Lat,
-    // route.params?.p2Lon,
-    // distanceUnits,
-    // bearingUnits,
-    // historyState, <-- infinite loop no touchy
   ]);
 
 
@@ -186,11 +132,6 @@ useEffect(() => {
   }
 
 
-  // let itemSeparatorRender= () => {
-  //   return(
-  //     <Text style={{backgroundColor: 'black', height: 1}}> </Text>
-  //   )
-  // }
   
   return (
     <Padder>
@@ -235,56 +176,11 @@ useEffect(() => {
         onChangeText={(val) => updateStateObject({ prodPrice: val })}
       />
 
-
-
-
-
-
-
-
-
-
-
-
-
-
       <Text> Picture: </Text>
 
       {tryRenderImage(state.prodThumbnail)}
 
-      {/* <Input
-        // placeholder='Enter product price'
-        value={state.prodThumbnail.toString()}
-        editable={false}
-        // autoCorrect={false}
-        // errorStyle={styles.input}
-        // errorMessage={validateIsNum(state.prodPrice)}
-        // onChangeText={(val) => updateStateObject({ prodPrice: val })}
-      /> */}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
       <Padder>
         <Button
@@ -295,21 +191,11 @@ useEffect(() => {
             navigation.navigate(
               'Camera',
               state
-              // items to send back
             );
             console.log('sending params to Camera: ', state);
           }}
         />
       </Padder>
-
-      {/* <Input
-        placeholder='Tap to Take a Picture'
-        value={state.prodThumbnail}
-        autoCorrect={false}
-        errorStyle={styles.input}
-        // errorMessage={validateNum(state.lon2)}
-        onChangeText={(val) => updateStateObject({ prodThumbnail: val })}
-      /> */}
 
 
       <Padder>
@@ -340,7 +226,6 @@ useEffect(() => {
             updateStateObject({
               prodTitle: '',
               prodExpirationDate: '',
-              prodDateAdded: '',
               prodDateToBin: '',
               prodIsExpired: false,
               prodThumbnail: '',
@@ -361,174 +246,18 @@ useEffect(() => {
           }}
         />
       </Padder> */}
-      
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='log state.prodThumbnail'
-          onPress={() => {
-            console.log(state.prodThumbnail)
-          }}
-        />
-      </Padder> */}
 
-
-      {/* 
-      <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log('route.params in ADD (from Settings):', route.params);
-            console.log('actual distanceUnits in ADD:', distanceUnits);
-            console.log('actual bearingUnits in ADD:', bearingUnits);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder>
-      */}
-
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG History params'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log(
-              'history params: ', 
-              {lat1: route.params.p1Lat,
-              lon1: route.params.p1Lon,
-              prodDateAdded: route.params.p2Lat,
-              prodDateToBin: route.params.p2Lon}
-            );
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder> */}
-
-
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG historyState'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log('historyState: ', historyState);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder> */}
-
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG state'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log('state: ', state);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder> */}
-
-
-      {/* CAPITALIZE FIRST LETTER IF POSSIBLE? */}
-      {/* <Padder>
-        <View style={styles.resultsView}>
-            <Text style={styles.allResults}>
-              Distance:
-            </Text>
-            <Text style={{...styles.resultsText, ...styles.allResults}}> {state.distance} </Text>
-        </View>
-        <View style={{...styles.resultsView, borderBottomWidth: 1,}}>
-            <Text style={styles.allResults}>
-              Bearing:
-            </Text>
-            <Text style={{...styles.resultsText, ...styles.allResults}}> {state.bearing} </Text>
-        </View>
-      </Padder> */}
-
-
-      {/* <Padder>
-        <View style={{height: '60%'}}>
-          <FlatList
-            // keyExtracor={(item) => item.text}
-            data={historyState}
-            renderItem={renderHistory}
-            ItemSeparatorComponent={itemSeparatorRender}
-            extraData={historyState}
-          />
-        </View>
-      </Padder> */}
-      
-      {/* {renderWeather(weatherState1)}
-      {renderWeather(weatherState2)} */}
 
   </Padder>  
   );
 };
 
 const styles = StyleSheet.create({
-  renderItemStyle: {
-    padding: 2,
-    // borderBottomWidth: 1,
-    borderColor: 'black',
-  },
-  historyTextStyle: {
-    fontSize: 18,
-  },
-  timestampStyle: {
-    // borderWidth: 1,
-    alignSelf: 'flex-end',
-    fontSize: 12,
-    fontStyle: 'italic',
-  },
   buttons: {
     margin: 10,
   },
-  weatherPointStyle: {
-    flexDirection: 'row',
-    backgroundColor: '#AA7FB9',
-  },
-  weatherIconStyle: {
-    justifyContent: 'center',
-  },
-  weatherTempStyle: {
-    fontSize: 50,
-    fontWeight: 'bold',
-  },
-  weatherDescStyle: {
-    marginBottom: 5,
-    fontSize: 16,
-  },
-  weatherPointNumberStyle: {
-    fontSize: 15,
-    paddingLeft: 15,
-    paddingTop: 10,
-    // alignSelf: 'center',
-  },
   input: {
     color: 'red',
-  },
-  resultsView: {
-    // flex: 1,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#000000',
-  },
-  resultsText:{
-    borderLeftWidth: 1,
-    borderColor: '#000000',
-    alignSelf: 'center',
-    width: '50%',
-  },
-  allResults: {
-    padding: 5,
-    fontWeight: 'bold',
   },
   navTouchStyle: {
     flexDirection: 'row',
@@ -539,23 +268,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   imagePreviewContainer: {
-    // alignContent: 'center',
-    // justifyContent: 'center',
-    maxHeight: 10,
-    // borderColor: 'red',
-    // borderWidth: 2,
+    maxHeight: 150,
   },
   imagePreview: {
     alignSelf: 'stretch',
-    // // justifyContent: 'center',
-    // // alignItems: 'center',
-    // // flex: 1,
+
     height: '100%',
-    // maxHeight: 20,
     width: '100%',
     // borderWidth: 2,
   },
-   noImageStyle: {
+  noImageStyle: {
     height: 100,
     width: '95%',
     fontSize: 15,

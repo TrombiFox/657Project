@@ -1,24 +1,19 @@
 import { Button, Input, Image } from '@rneui/themed';
 import { 
-  FlatList,
   Keyboard,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
-  ActivityIndicator,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Padder from '../components/Padder';
 import {
-  inithw4DB,
-  storeHistoryItem,
   updateHistoryItem,
-  setupHistoryListener,
 } from '../helpers/fb-CoPantry';
 import { AntDesign } from '@expo/vector-icons';
+import DropDownPicker from 'react-native-dropdown-picker';
  
 
 const UpdateScreen = ({ route, navigation }) => {
@@ -45,34 +40,17 @@ const UpdateScreen = ({ route, navigation }) => {
     });
   };
 
-  // const updateItemObject = (vals) => {
-  //   // console.log('---- In updateItemObject ', vals);
-  //   setItem({
-  //     ...item,
-  //     ...vals,
-  //   });
-  // };
+  const [openA, setOpenA] = useState(false);
+  const [valueA, setValueA] = useState(route.params.state.prodIsExpired);
+  const [itemsA, setItemsA] = useState([
+    {label: 'Yes', value: true},
+    {label: 'No', value: false}
+  ]);
 
+  
 
   useEffect(() => {
     navigation.setOptions({
-      // headerRight: () => (
-      //   <TouchableOpacity
-      //     onPress={() => {
-      //       navigation.navigate(
-      //         'Settings',
-      //         {distanceUnits: distanceUnits,
-      //         bearingUnits: bearingUnits},
-      //       );
-      //       console.log('headerRight (Settings) clicked!');
-      //       Keyboard.dismiss();
-      //     }}
-      //   >
-      //     <FontAwesome name="gears" size={24} color="black"/>
-      //   </TouchableOpacity>
-      // ),
-      // // headerTitleAlign: 'center',  // left here for my own note (how to change style individually)
-      // // backgroundColor: '#B9DE8A',
       headerLeft: () => (
         <TouchableOpacity
           style={styles.navTouchStyle}
@@ -136,8 +114,6 @@ const UpdateScreen = ({ route, navigation }) => {
   }
 
 
-
-
   let tryRenderImage = (image) => {
     try {
       return (
@@ -162,17 +138,10 @@ const UpdateScreen = ({ route, navigation }) => {
     }
   }
 
-
-
-
-  // let itemSeparatorRender= () => {
-  //   return(
-  //     <Text style={{backgroundColor: 'black', height: 1}}> </Text>
-  //   )
-  // }
   
   return (
     <Padder>
+      
       <Text> Product Name: </Text>
       <Input
         placeholder='Enter product name'
@@ -182,6 +151,7 @@ const UpdateScreen = ({ route, navigation }) => {
         errorMessage={validateNonEmpty(state.prodTitle)}
         onChangeText={(val) => updateStateObject({ prodTitle: val })}
       />
+
       <Text> Expiration Date: </Text>
       <Input
         placeholder='Enter expiration date'
@@ -191,6 +161,31 @@ const UpdateScreen = ({ route, navigation }) => {
         errorMessage={validateNonEmpty(state.prodExpirationDate)}
         onChangeText={(val) => updateStateObject({ prodExpirationDate: val })}
       />
+
+      <Text> Has This Expired? </Text>
+      <DropDownPicker
+          style={{marginBottom: 15}}
+          open={openA}
+          // onOpen={onOpenA}
+          // // playing with options:
+          // theme="DARK"
+          // mode="SIMPLE"
+          // dropDownDirection="AUTO"
+          // bottomOffset={100}
+          listMode="SCROLLVIEW"
+          value={valueA}
+          items={itemsA}
+          setOpen={setOpenA}
+          setValue={setValueA}
+          setItems={setItemsA}
+          // zIndex={1000} // no need since only one
+          onChangeValue={(value) => {
+            updateStateObject({ prodIsExpired: value })
+            console.log('1 and 2 dropdown value changed to:', value);
+          }}
+          placeholder="Select an Option"
+        />
+
       <Text> Date to Throw Away: </Text>
       <Input
         placeholder='Enter the date to throw it away'
@@ -241,44 +236,8 @@ const UpdateScreen = ({ route, navigation }) => {
         />
       </Padder>
 
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG item'
-          onPress={() => {
-            console.log('-------- FROM UPDATE --------');
-            console.log('item from Update: ', item);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder>
 
-      <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG item2'
-          onPress={() => {
-            console.log('-------- FROM UPDATE --------');
-            console.log('item2 from Update: ', item2);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder>
-
-      
-      <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG state'
-          onPress={() => {
-            console.log('-------- FROM UPDATE --------');
-            console.log('state from Update: ', state);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder>
-     
-
+      {/*
       <Padder>
         <Button
           style={styles.buttons}
@@ -289,120 +248,19 @@ const UpdateScreen = ({ route, navigation }) => {
             console.log('---------------------------------');
           }}
         />
-      </Padder> */}
-
-
-      {/* 
-      <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log('route.params in ADD (from Settings):', route.params);
-            console.log('actual distanceUnits in ADD:', distanceUnits);
-            console.log('actual bearingUnits in ADD:', bearingUnits);
-            console.log('---------------------------------');
-          }}
-        />
       </Padder>
       */}
-
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG History params'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log(
-              'history params: ', 
-              {lat1: route.params.p1Lat,
-              lon1: route.params.p1Lon,
-              prodDateAdded: route.params.p2Lat,
-              prodDateToBin: route.params.p2Lon}
-            );
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder> */}
-
-
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
-          title='LOG state'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log('state: ', state);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder> */}
 
   </Padder>  
   );
 };
 
 const styles = StyleSheet.create({
-  renderItemStyle: {
-    padding: 2,
-    // borderBottomWidth: 1,
-    borderColor: 'black',
-  },
-  historyTextStyle: {
-    fontSize: 18,
-  },
-  timestampStyle: {
-    // borderWidth: 1,
-    alignSelf: 'flex-end',
-    fontSize: 12,
-    fontStyle: 'italic',
-  },
   buttons: {
     margin: 10,
   },
-  weatherPointStyle: {
-    flexDirection: 'row',
-    backgroundColor: '#AA7FB9',
-  },
-  weatherIconStyle: {
-    justifyContent: 'center',
-  },
-  weatherTempStyle: {
-    fontSize: 50,
-    fontWeight: 'bold',
-  },
-  weatherDescStyle: {
-    marginBottom: 5,
-    fontSize: 16,
-  },
-  weatherPointNumberStyle: {
-    fontSize: 15,
-    paddingLeft: 15,
-    paddingTop: 10,
-    // alignSelf: 'center',
-  },
   input: {
     color: 'red',
-  },
-  resultsView: {
-    // flex: 1,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#000000',
-  },
-  resultsText:{
-    borderLeftWidth: 1,
-    borderColor: '#000000',
-    alignSelf: 'center',
-    width: '50%',
-  },
-  allResults: {
-    padding: 5,
-    fontWeight: 'bold',
   },
   navTouchStyle: {
     flexDirection: 'row',

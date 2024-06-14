@@ -122,62 +122,8 @@ const CameraScreen = ({ route, navigation }) => {
         <Button title="Discard" onPress={() => setPhoto(undefined)} />
       </View>
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      // <View styles={styles.previewContainer}>
-      //   <Text> aaaaaaa </Text>
-      //   <Image
-      //     style={styles.imagePreview}
-      //     // source={photo}
-      //     // source={{ uri: photoURI}}
-      //     // source={{ uri:`${photo}`}}
-      //     source={{ uri: 'data:image/jpg;base64,' + photo.base64}}
-      //     // source={{ uri: `data:image/jpg;base64,${photo.base64}`}}
-      //   />
-      //   <Button
-      //     title='Use Photo'
-      //     onPress={savePhoto}
-      //   />
-      //   <Button
-      //     title='Discard Photo'
-      //     onPress={() => {
-      //       setPhoto(undefined)
-      //     }}
-      //   />
-      //   <Button
-      //     title='Log photo.uri'
-      //     onPress={() => {
-      //       console.log(photo.uri);
-      //     }}
-      //   />
-      //   <Button
-      //     title='Log photo.base64'
-      //     onPress={() => {
-      //       console.log(photo.base64);
-      //     }}
-      //   />
-       
-      // </View>
     );
   }
-
-
 
 
   if (!permission) {

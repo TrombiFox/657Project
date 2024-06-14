@@ -3,17 +3,9 @@ import { getDatabase, onValue, ref, remove, set, push } from 'firebase/database'
 import { firebaseConfig } from './fb-credentials';
 
 
-
 export function inithw4DB() {
     initializeApp(firebaseConfig);
 }
-
-// (for demo purposes)
-// export function writeData(key, data) {
-//     const db = getDatabase();
-//     const reference = ref(db, `hw4Data/${key}`);
-//     set(reference, data);
-// }
 
 // store persistent data (automatically generated unique keys)
 // note that it will store multiple of the same data

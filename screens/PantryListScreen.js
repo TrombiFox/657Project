@@ -204,7 +204,6 @@ const [bearingUnits, setBearingUnits] = useState('degrees');
 const styles = StyleSheet.create({
     renderItemStyle: {
       padding: 2,
-      // borderBottomWidth: 1,
       borderColor: 'black',
     },
     navTouchStyle: {
@@ -219,28 +218,15 @@ const styles = StyleSheet.create({
       fontSize: 18,
     },
     timestampStyle: {
-      // borderWidth: 1,
       alignSelf: 'flex-end',
       fontSize: 12,
       fontStyle: 'italic',
     },
     imagePreviewContainer: {
-      // alignContent: 'center',
-      // justifyContent: 'center',
-      // justifyItems: 'center',
-      // alignItems: 'center',
       maxHeight: 100,
       width: '100%',
-      // borderColor: 'red',
-      // borderWidth: 2,
     },
     imagePreview: {
-      // alignSelf: 'stretch',
-      // justifySelf: 'center',
-      // alignSelf: 'center',
-      // alignItems: 'center',
-      // justifyItems: 'center',
-      // flex: 1,
       height: '100%',
       width: '100%',
       // borderWidth: 2,

@@ -27,7 +27,7 @@ const SettingsScreen = ({ route, navigation }) => {
   }, []);
 
   const onOpenB = useCallback(() => {
-    setopenA(false);
+    setOpenA(false);
   }, []);
 
 
@@ -117,24 +117,19 @@ const SettingsScreen = ({ route, navigation }) => {
       </Padder>
 
 
-
-
-      {/*
+      
       <Padder>
         <Button
           style={styles.buttons}
-          title='LOG'
+          title='Button Left Here In Case I Implement On This Page Later :)'
           onPress={() => {
             console.log('-------- FROM SETTINGS --------');
-            console.log('route.params in Settings (from HOME):', route.params);
-            // console.log('currentUnitTypes: ', currentUnitTypes);
-            console.log('valueA from Settings:', valueA);
-            console.log('valueB from Settings:', valueB);
+            console.log('pushed da button yaaay');
             console.log('-------------------------------');
           }}
         />
       </Padder>
-      */}
+     
 
 
 
