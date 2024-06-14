@@ -173,10 +173,10 @@ const UpdateScreen = ({ route, navigation }) => {
   
   return (
     <Padder>
-      {/* <Text> Product Name: </Text>
+      <Text> Product Name: </Text>
       <Input
         placeholder='Enter product name'
-        value={item.state.prodTitle.toString()}
+        value={state.prodTitle.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateNonEmpty(state.prodTitle)}
@@ -185,7 +185,7 @@ const UpdateScreen = ({ route, navigation }) => {
       <Text> Expiration Date: </Text>
       <Input
         placeholder='Enter expiration date'
-        value={item.state.prodExpirationDate.toString()}
+        value={state.prodExpirationDate.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateNonEmpty(state.prodExpirationDate)}
@@ -194,16 +194,17 @@ const UpdateScreen = ({ route, navigation }) => {
       <Text> Date to Throw Away: </Text>
       <Input
         placeholder='Enter the date to throw it away'
-        value={item.state.prodDateToBin.toString()}
+        value={state.prodDateToBin.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateNonEmpty(state.prodDateToBin)}
         onChangeText={(val) => updateStateObject({ prodDateToBin: val })}
-      /> */}
+      />
+
       <Text> Price: </Text>
       <Input
         placeholder='Enter product price'
-        value={state.prodPrice}
+        value={state.prodPrice.toString()}
         autoCorrect={false}
         errorStyle={styles.input}
         errorMessage={validateIsNum(state.prodPrice)}
@@ -224,7 +225,6 @@ const UpdateScreen = ({ route, navigation }) => {
           onPress={() => {
             if (formValid(state) === true) {
               console.log('UPDATE BUTTON PRESSED');
-              // let item2 = {...item};
               updateHistoryItem(state, itemKey);
               navigation.navigate(
                 'View Item',
@@ -330,18 +330,6 @@ const UpdateScreen = ({ route, navigation }) => {
       {/* <Padder>
         <Button
           style={styles.buttons}
-          title='LOG historyState'
-          onPress={() => {
-            console.log('-------- FROM ADD --------');
-            console.log('historyState: ', historyState);
-            console.log('---------------------------------');
-          }}
-        />
-      </Padder> */}
-
-      {/* <Padder>
-        <Button
-          style={styles.buttons}
           title='LOG state'
           onPress={() => {
             console.log('-------- FROM ADD --------');
@@ -350,39 +338,6 @@ const UpdateScreen = ({ route, navigation }) => {
           }}
         />
       </Padder> */}
-
-
-      {/* CAPITALIZE FIRST LETTER IF POSSIBLE? */}
-      {/* <Padder>
-        <View style={styles.resultsView}>
-            <Text style={styles.allResults}>
-              Distance:
-            </Text>
-            <Text style={{...styles.resultsText, ...styles.allResults}}> {state.distance} </Text>
-        </View>
-        <View style={{...styles.resultsView, borderBottomWidth: 1,}}>
-            <Text style={styles.allResults}>
-              Bearing:
-            </Text>
-            <Text style={{...styles.resultsText, ...styles.allResults}}> {state.bearing} </Text>
-        </View>
-      </Padder> */}
-
-
-      {/* <Padder>
-        <View style={{height: '60%'}}>
-          <FlatList
-            // keyExtracor={(item) => item.text}
-            data={historyState}
-            renderItem={renderHistory}
-            ItemSeparatorComponent={itemSeparatorRender}
-            extraData={historyState}
-          />
-        </View>
-      </Padder> */}
-      
-      {/* {renderWeather(weatherState1)}
-      {renderWeather(weatherState2)} */}
 
   </Padder>  
   );
