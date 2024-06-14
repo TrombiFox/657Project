@@ -19,10 +19,10 @@
 - npx expo install expo-camera
 
 ### Reference:
-- // Expo Camera
+#### // Expo Camera
 - initial code taken from documentation:
 - https://docs.expo.dev/versions/latest/sdk/camera/#types
 ####
-- // additional code / reference taken from Chelsea Farley
+#### // additional code / reference taken from Chelsea Farley
 - video (user MissCoding): https://www.youtube.com/watch?v=4WPjWK0MYMI
 - gitHub repository (user chelseafarley): https://github.com/chelseafarley/CameraAppTutorial/blob/main/App.js
