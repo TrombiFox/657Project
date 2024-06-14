@@ -77,12 +77,9 @@ const CameraScreen = ({ route, navigation }) => {
       quality: 1,
       base64: true,
       exif: false,
-      onPictureSaved: (
-        // function called when picture taken
-        console.log('Picture taken! (notice from takePic > onPictureSaved)')
-      )
+      
     };
-
+    
     let newPhoto = await cameraRef.current.takePictureAsync(options);
     setPhoto(newPhoto);
     console.log('after setPhoto(newPhoto) in takePic()')
