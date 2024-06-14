@@ -3,6 +3,10 @@
 // initial code taken from documentation:
 // https://docs.expo.dev/versions/latest/sdk/camera/#types
 
+// additional code / directions taken from Chelsea Farley
+// video (user MissCoding): https://www.youtube.com/watch?v=4WPjWK0MYMI
+// gitHub repository (user chelseafarley): https://github.com/chelseafarley/CameraAppTutorial/blob/main/App.js
+
 import { CameraView, useCameraPermissions, takePic } from 'expo-camera';
 import React, { useEffect, useState, useRef } from 'react';
 import { Button,
@@ -12,7 +16,7 @@ import { Button,
   View,
   Image,
 } from 'react-native';
-// import * as MediaLibray from 'expo-media-library';
+import * as MediaLibrary from 'expo-media-library';
 import { AntDesign } from '@expo/vector-icons';
 
 const CameraScreen = ({ route, navigation }) => {
@@ -22,19 +26,20 @@ const CameraScreen = ({ route, navigation }) => {
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [photo, setPhoto] = useState();
+  // const [photoURI, setPhotoURI] = useState();
 
   
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
 
-
-  // const [mediaPermission, setMediaPermission] = useState();
-
-
-  //  // maybe later
-  // useEffect => {
-  //   (async () => {
-  //     const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
-  //   }) ();
-  // }, []);
+   // maybe later
+   useEffect(() => {
+    (async () => {
+      // const cameraPermission = await Camera.requestCameraPermissionsAsync();
+      const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
+      // setHasCameraPermission(cameraPermission.status === "granted");
+      setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
+    })();
+  }, []);
 
 
   useEffect(() => {
@@ -54,24 +59,33 @@ const CameraScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       ),
     })
-    // things to do
-  }, []);
+    // if (photo?.uri) {
+    //   setPhotoURI(photo.uri);
+    // }
+    },
+    [
+      // photo,
+    ]
+  );
 
 
 
   
 
-  let takePic = async() => {
-    let options={
+  let takePic = async () => {
+    let options = {
       quality: 1,
       base64: true,
-      exif: false
+      exif: false,
+      onPictureSaved: (
+        // function called when picture taken
+        console.log('Picture taken! (notice from takePic > onPictureSaved)')
+      )
     };
+
     let newPhoto = await cameraRef.current.takePictureAsync(options);
     setPhoto(newPhoto);
-    // console.log(newPhoto)
-    // console.log(photo)
-    console.log('end of setting newPhoto');
+    console.log('after setPhoto(newPhoto) in takePic()')
   };
 
 
@@ -79,30 +93,73 @@ const CameraScreen = ({ route, navigation }) => {
 
   if (photo) {
     let savePhoto = () => {
-      // navigate(
-      //   'Add Item',
-      //     (photo.uri)
-      // )
-      setPhoto(undefined);
+      MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
+        setPhoto(undefined);
+      });
+      console.log("savePhoto executed");
+      // console.log(photo.uri);
+      // console.log('source: ', 'data:image/jpg;base64,' + photo.base64)
     };
     return(
-      <View styles={styles.previewContainer}>
-        <Text> asshole </Text>
-        <Image
-          style={styles.imagePreview}
-          source={{ uri: 'data:image/jpg;base64,' + photo.base64}}
-        />
-        <Button
-          title='Use Photo'
-          onPress={savePhoto}
-        />
-        <Button
-          title='Discard Photo'
-          onPress={() => {
-            setPhoto(undefined)
-          }}
-        />
+      
+      <View style={styles.previewContainer}>
+        <Image style={styles.imagePreview} source={{ uri: `data:image/jpg;base64,${photo.base64}`}} />
+        {hasMediaLibraryPermission ? <Button title="Save" onPress={savePhoto} /> : undefined}
+        <Button title="Discard" onPress={() => setPhoto(undefined)} />
       </View>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      // <View styles={styles.previewContainer}>
+      //   <Text> aaaaaaa </Text>
+      //   <Image
+      //     style={styles.imagePreview}
+      //     // source={photo}
+      //     // source={{ uri: photoURI}}
+      //     // source={{ uri:`${photo}`}}
+      //     source={{ uri: 'data:image/jpg;base64,' + photo.base64}}
+      //     // source={{ uri: `data:image/jpg;base64,${photo.base64}`}}
+      //   />
+      //   <Button
+      //     title='Use Photo'
+      //     onPress={savePhoto}
+      //   />
+      //   <Button
+      //     title='Discard Photo'
+      //     onPress={() => {
+      //       setPhoto(undefined)
+      //     }}
+      //   />
+      //   <Button
+      //     title='Log photo.uri'
+      //     onPress={() => {
+      //       console.log(photo.uri);
+      //     }}
+      //   />
+      //   <Button
+      //     title='Log photo.base64'
+      //     onPress={() => {
+      //       console.log(photo.base64);
+      //     }}
+      //   />
+       
+      // </View>
     );
   }
 
@@ -179,6 +236,8 @@ const styles = StyleSheet.create({
   imagePreview: {
     alignSelf: 'stretch',
     flex: 1,
+    // height: 100,
+    // width: 100,
   },
   navTextStyle: {
     fontSize: 15,
