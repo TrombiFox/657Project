@@ -20,8 +20,8 @@
 
 ### Reference:
 - // Expo Camera
-- // initial code taken from documentation:
-- // https://docs.expo.dev/versions/latest/sdk/camera/#types
+initial code taken from documentation:
+https://docs.expo.dev/versions/latest/sdk/camera/#types
 
 - // additional code / directions taken from Chelsea Farley
 - // video (user MissCoding): https://www.youtube.com/watch?v=4WPjWK0MYMI
