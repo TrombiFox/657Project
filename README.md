@@ -1,4 +1,4 @@
-## Name: "Co-Pantry" (?)
+## App Name: "Co-Pantry"
 
 ### Final Project
 ### CIS 657(01) (Spring/Summer 2024)
