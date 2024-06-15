@@ -10,6 +10,7 @@
 - Firebase for the database
 - React-Native Firebase Analytics
 - EAS Update / Build
+- Expo Media Library
 - intended to use Google's ML Kit barcode scanning API... failed to get to this.
 
 - deployed build https://expo.dev/preview/update?message=deploy&updateRuntimeVersion=1.0.0&createdAt=2024-06-15T05%3A41%3A15.761Z&slug=hw3-start-template&projectId=92c9fca8-ba71-4c1a-ab2d-ab54bf3fade8&group=bad1d4ec-b96b-4ddb-a952-175a2e8dc0b1
