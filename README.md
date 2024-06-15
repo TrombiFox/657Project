@@ -8,7 +8,7 @@
 #### Used:
 - Expo Camera
 - Firebase for the database
-- React-Native Firebase Analtyics
+- React-Native Firebase Analytics
 - EAS Update / Build
 - intended to use Google's ML Kit barcode scanning API... failed to get to this.
 
