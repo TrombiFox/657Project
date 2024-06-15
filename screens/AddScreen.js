@@ -49,7 +49,7 @@ const AddScreen = ({ route, navigation }) => {
           onPress={() => {
             navigation.navigate(
               'Co-Pantry',
-              {historyState}
+              
             );
             console.log('headerLeft (To Co-Pantry) clicked!');
             Keyboard.dismiss();

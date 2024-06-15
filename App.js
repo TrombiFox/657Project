@@ -3,7 +3,9 @@
 // Zachary Stout
 // Completed: ???
 
-import React from 'react';
+// import * as Analytics from "expo-firebase-analytics";
+import analytics from "@react-native-firebase/analytics";
+import React, { useRef } from 'react';
 import {
   Keyboard,
   SafeAreaView,
@@ -21,6 +23,9 @@ import CameraScreen from './screens/CameraScreen';
 
 
 export default function App() {
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
+  
   const Stack = createNativeStackNavigator();
 
 
@@ -31,7 +36,27 @@ export default function App() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.safeAreaStyle}>
-        <NavigationContainer theme={{colors: {background: '#FFFECF'}}}>
+        <NavigationContainer
+          ref={navigationRef}
+          theme={{colors: {background: '#FFFECF'}}}
+          onReady={() =>
+            (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+          }
+          onStateChange={ async () => {
+            const previousRouteName = routeNameRef.current;
+            const currentRouteName = navigationRef.current.getCurrentRoute().name;
+            console.log(previousRouteName, ' ---> ', currentRouteName);
+            if (previousRouteName !== currentRouteName) {
+              // await Analytics.logEvent("screen_view", {
+                await analytics().logEvent("screen_view", {
+                screen_name: currentRouteName,
+                screen_class: currentRouteName,
+              });
+            }
+            // Save the current route name for later comparison
+            routeNameRef.current = currentRouteName;
+          }}
+        >
           <Stack.Navigator
             screenOptions={{
               headerStyle: {

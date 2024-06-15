@@ -1,3 +1,10 @@
 {
-  "urlRandomness": "QgLlJWg"
+  "urlRandomness": "QgLlJWg",
+  "dev": true,
+  "minify": false,
+  "https": false,
+  "hostType": "lan",
+  "lanType": "ip",
+  "scheme": "exp+hw3-start-template",
+  "devClient": false
 }

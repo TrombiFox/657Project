@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "483742863713",
+    "firebase_url": "https://co-pantry-default-rtdb.firebaseio.com",
+    "project_id": "co-pantry",
+    "storage_bucket": "co-pantry.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483742863713:android:c9493d873f93fb65443520",
+        "android_client_info": {
+          "package_name": "edu.gvsu.copantry"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZwLP_q_ZMnSTLtdMyVhEzr7A-7i7scIk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
